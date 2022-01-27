@@ -29,8 +29,10 @@ public class IO {
     }
     public String read() throws IOException  {
         currentLine = reader.readLine();
-        if (currentLine == null)
-            return "EOF";
+        if (currentLine == null) {
+            reader.close();
+            return "rb-EOF";
+        }
         lineno++;
         return currentLine;
     }

@@ -11,7 +11,7 @@ public class Split implements Iterator<String> {
 	private String toParse;
 	private final IO src;
 	private int currentIndex , maxIndex;
-	private boolean isLeft;
+	private boolean isLeft,isFinished;
 	public Split (IO src) {
 		this.src = src;
 	}
@@ -56,13 +56,18 @@ public class Split implements Iterator<String> {
 
 	@Override
 	public String next(){
-		if (toParse.equals("EOF"))
+		if (toParse.equals("rb-EOF")) {
+			isFinished = true;
 			return toParse;
+		}
 		split();
 		return currentString;
 	}
 	@Override
 	public boolean hasNext(){
 		return isLeft;
+	}
+	public boolean EOF() throws IOException {
+		return isFinished;
 	}
 }

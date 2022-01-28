@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import rainbow.lang.IO;
-import rainbow.lang.Props;
 
 public class Split implements Iterator<String> {
 	private String currentString;
@@ -36,12 +35,9 @@ public class Split implements Iterator<String> {
 		while (true) {
 			toParse = src.read() + ' ';
 			int temp;
-			Props.addProp("lineno", Integer.toString(src.getLineno()));                            
-			Props.addProp("line", toParse);
 			if ((temp = Comment.commentIndex(toParse)) == 0)
 				continue;
 			else if (checkEOFString(toParse)) {
-				src.close();
 				isFinished = true;
 				isLeft = false;
 				break;
@@ -79,8 +75,8 @@ public class Split implements Iterator<String> {
 	}
 
 	public boolean EOF() throws IOException {
-		if (isFinished)
-			src.close();
+		//if (isFinished)
+		//	src.close();
 		return isFinished;
 	}
 }

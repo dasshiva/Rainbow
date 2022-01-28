@@ -30,8 +30,7 @@ public class IO {
     public String read() throws IOException  {
         currentLine = reader.readLine();
         if (currentLine == null) {
-            reader.close();
-            return "rb-EOF";
+            return "END";
         }
         lineno++;
         return currentLine;
@@ -41,5 +40,8 @@ public class IO {
     }
     public String getFilename(){
         return filename;
+    }
+    public void close() throws IOException {
+	    reader.close();
     }
 }

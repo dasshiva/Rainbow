@@ -24,7 +24,9 @@ public class Split implements Iterator<String> {
 			else {
 				currentIndex += 1;
 				if (currentIndex >= toParse.length())
+				{System.out.println("Yo");
 					isLeft = false;
+				}
 				else if (sb.length()==0)
 					continue;
 				currentString = sb.toString();
@@ -55,8 +57,8 @@ public class Split implements Iterator<String> {
 	}
 
 	@Override
-	public String next(){
-		if (toParse.equals("rb-EOF")) {
+	public String next() {
+		if (checkEOFString(toParse)) {
 			isFinished = true;
 			return toParse;
 		}
@@ -67,7 +69,17 @@ public class Split implements Iterator<String> {
 	public boolean hasNext(){
 		return isLeft;
 	}
+	private boolean checkEOFString(String str){
+		if (str.charAt(0) == 'E' && str.charAt(1) == 'N' 
+				&& str.charAt(2) == 'D') 
+			return true;
+		return false;
+	}
+
 	public boolean EOF() throws IOException {
+		if (isFinished)
+			src.close();
+		System.out.println(isFinished);
 		return isFinished;
 	}
 }

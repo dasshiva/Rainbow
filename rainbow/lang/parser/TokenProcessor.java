@@ -22,15 +22,16 @@ public class TokenProcessor {
                 while(sp.hasNext()) {
                     target.add(sp.next());
                 }
-                if (target.size()==0) continue;
                 parseList();
                 target.clear();
             }
         } catch (IOException e) {
             throw new ReaderException(Props.getProp("-input"),e.getMessage());
         }
+	System.out.println("Fin");
     }
     private void parseList() {
+	if (target.size() == 0) return;
         if (target.get(0).equals("init"))
         parseInitStatement();
     }
@@ -39,7 +40,8 @@ public class TokenProcessor {
         String ID = null;
         Object val = null;
         boolean haveType = false, haveID=false, haveVal = false;
-        for (String str:target){ 
+        for (int i=1;i<target.size();i++){ 
+	    String str = target.get(i);
             if (!haveType) {
                 switch(str) {
                     case "int":

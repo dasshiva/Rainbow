@@ -24,9 +24,7 @@ public class Split implements Iterator<String> {
 			else {
 				currentIndex += 1;
 				if (currentIndex >= toParse.length())
-				{System.out.println("Yo");
 					isLeft = false;
-				}
 				else if (sb.length()==0)
 					continue;
 				currentString = sb.toString();
@@ -42,6 +40,12 @@ public class Split implements Iterator<String> {
 			Props.addProp("line", toParse);
 			if ((temp = Comment.commentIndex(toParse)) == 0)
 				continue;
+			else if (checkEOFString(toParse)) {
+				src.close();
+				isFinished = true;
+				isLeft = false;
+				break;
+			}
 			else if (temp == -1) {
 				currentIndex = 0;
 				isLeft = true;
@@ -58,10 +62,8 @@ public class Split implements Iterator<String> {
 
 	@Override
 	public String next() {
-		if (checkEOFString(toParse)) {
-			isFinished = true;
-			return toParse;
-		}
+		if (isFinished)
+		return toParse;
 		split();
 		return currentString;
 	}
@@ -79,7 +81,6 @@ public class Split implements Iterator<String> {
 	public boolean EOF() throws IOException {
 		if (isFinished)
 			src.close();
-		System.out.println(isFinished);
 		return isFinished;
 	}
 }

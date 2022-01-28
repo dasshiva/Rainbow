@@ -12,6 +12,7 @@ import rainbow.lang.parser.exception.SyntaxError;
 public class TokenProcessor {
     private final Split sp;
     private final ArrayList<String> target = new ArrayList<>();
+    private final SymbolTable symTab = new SymbolTable();
     public TokenProcessor(Split sp) {
         this.sp = sp;
     }
@@ -28,12 +29,15 @@ public class TokenProcessor {
         } catch (IOException e) {
             throw new ReaderException(Props.getProp("-input"),e.getMessage());
         }
-	System.out.println("Fin");
     }
     private void parseList() {
 	if (target.size() == 0) return;
+    else {
         if (target.get(0).equals("init"))
-        parseInitStatement();
+            parseInitStatement();
+        else if (target.get(0).equals("print"))
+            parsePrintStatement();
+       }
     }
     private void parseInitStatement() {
         Types type = null;
@@ -64,16 +68,17 @@ public class TokenProcessor {
             else  {
                 try {
                     switch(type) {
-                        case TYPE_DECIMAL:
+                        case TYPE_INT:
                         val = Integer.parseInt(str);
                         break;
-                        case TYPE_INT:
+                        case TYPE_DECIMAL:
                         val = Double.parseDouble(str);
                         break;
                         case TYPE_STRING:
                         val = str;
                     }
                     haveVal = true;
+                    symTab.addSymbol(ID, type, val);
                 }
                 catch (NumberFormatException e) {
                     throw new IllegalValueException(type, str);
@@ -82,5 +87,16 @@ public class TokenProcessor {
         }
         if (!haveType || !haveID || !haveVal) 
         throw new SyntaxError("init statement body is incomplete : Missing type , identifier or value");
+    }
+    private void parsePrintStatement() {
+        if(!(target.size()==2)) 
+           throw new SyntaxError("print statement body is incomplete : Missing the variable to print");
+        Object[] val = symTab.retrieveSymbol(target.get(1));
+        if ((Types) val[0] == Types.TYPE_INT) 
+            System.out.println(Integer.toString((Integer) val[1]));
+        else if ((Types) val[0] == Types.TYPE_DECIMAL)
+            System.out.println(Double.toString((Double) val[1]));
+        else 
+            System.out.println((String) val[1]);
     }
 }

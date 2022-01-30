@@ -31,7 +31,9 @@ public class Split implements Iterator<String> {
 			}
 		}
 	}
-	public void getNext() throws IOException {
+	public void getNext(boolean exitNow) throws IOException {
+		if (exitNow)
+			src.closeAndExit();
 		while (true) {
 			toParse = src.read() + ' ';
 			int temp;

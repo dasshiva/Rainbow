@@ -1,0 +1,18 @@
+#!/bin/bash
+ROOT=$PWD
+if [[ ! "$1" == "" ]]; then
+	ROOT=$1
+fi
+if [[ ! -d "$ROOT/rainbow" ]]; then
+	echo "This script has to be run at the root of the repository or you have to specify the root of the repo as its arguement"
+	exit 1
+fi
+PREFIX=rainbow/lang
+cd $ROOT
+javac $PREFIX/*.java $PREFIX/runtime/*.java $PREFIX/runtime/exception/*.java -d out
+cd out/
+jar cfe Rainbow.jar rainbow.lang.Main \
+	rainbow/lang/*.class rainbow/lang/exception/*.class \
+	rainbow/lang/parser/*.class rainbow/lang/parser/exception/*.class \
+	rainbow/lang/runtime/*.class rainbow/lang/runtime/exception/*.class
+

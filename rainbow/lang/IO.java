@@ -68,4 +68,9 @@ public class IO {
         Props.addProp("lineno", Integer.toString(lineno));
         return currentLine;
     }
+    
+    public void closeAndExit () throws IOException {
+	    reader.close();
+	    System.exit(1);
+    }
 }

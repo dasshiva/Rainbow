@@ -15,11 +15,24 @@ public class Split implements Iterator<String> {
 		this.src = src;
 	}
 	private void split(){
+		boolean inString = false;
 		StringBuilder sb = new StringBuilder();
 		for (; currentIndex < maxIndex; currentIndex++){
 			char ins = toParse.charAt(currentIndex);
-			if (!Character.isWhitespace(ins))
+			if (inString) {
+				if (ins == '"') {
+					inString = false;
+					continue;
+				}
 				sb.append(ins);
+			}
+			else if (!Character.isWhitespace(ins)) {
+				if (ins == '"') { 
+					inString = true;
+					continue;
+				}
+				sb.append(ins);
+			}
 			else {
 				currentIndex += 1;
 				if (currentIndex >= toParse.length())

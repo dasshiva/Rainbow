@@ -9,7 +9,7 @@ if [[ ! -d "$ROOT/rainbow" ]]; then
 fi
 PREFIX=rainbow/lang
 cd $ROOT
-javac $PREFIX/*.java $PREFIX/runtime/*.java $PREFIX/runtime/exception/*.java -d out
+javac $PREFIX/*.java $PREFIX/runtime/*.java $PREFIX/runtime/exception/*.java --source 8 --target 8 -d out 
 cd out/
 jar cfe Rainbow.jar rainbow.lang.Main \
 	rainbow/lang/*.class rainbow/lang/exception/*.class \

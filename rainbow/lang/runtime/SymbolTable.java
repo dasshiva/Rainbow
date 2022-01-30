@@ -7,9 +7,9 @@ import rainbow.lang.parser.Types;
 import java.util.ArrayList;
 
 class SymbolTable {
-    private static ArrayList<String> identifiers = new ArrayList();
-    private static ArrayList<Types> types = new ArrayList();
-    private static ArrayList<Object> vals = new ArrayList();
+    private static ArrayList<String> identifiers = new ArrayList<>();
+    private static ArrayList<Types> types = new ArrayList<>();
+    private static ArrayList<Object> vals = new ArrayList<>();
     private SymbolTable () {}
     public static void addSymbol (String name, Types ty ,Object value){
         if (identifiers.contains(name))

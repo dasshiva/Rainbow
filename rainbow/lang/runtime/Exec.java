@@ -20,9 +20,9 @@ public class Exec {
 		}
 	}
 	public static void StackTracePrinter(Throwable e) {
-		var elems = e.getStackTrace();
+		StackTraceElement[] elems = e.getStackTrace();
 		System.out.println("Stack Trace:");
-		for (var elem: elems){
+		for (StackTraceElement elem: elems){
 			System.out.println(elem.toString());
 		}
 	}

@@ -8,10 +8,10 @@ public class UnexpectedTokenException extends ParserException {
         super ("Expected" + cause + "here");
     }
     private static String transform (char ch){
-	    return switch (ch) {
-		    case '\n' : yield "newline";
-		    case ' ' :  yield "whitespace";
-		    default :  yield Character.toString(ch);
-	    };
+	    switch (ch) {
+		    case '\n' : return "newline";
+		    case ' ' :  return "whitespace";
+		    default :  return Character.toString(ch);
+	    }
     }
 }

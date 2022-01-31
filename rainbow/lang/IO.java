@@ -27,6 +27,7 @@ public class IO {
     private String currentLine;
     private final String filename;
 
+    /* The source from which we will be reading*/
     private final BufferedReader reader;
 
     public IO () {
@@ -51,7 +52,7 @@ public class IO {
     }
 
     /* 
-    * The method which reads the file line by line and returns the line which 
+    * This method reads the file line by line and returns the line which
     * was just read. On EOF it returns a special token called END to the parser
     * which signals to it that the file is complete and closes the stream. 
     * It also sets the line and lineno global properties which are used by all parser exceptions
@@ -60,7 +61,7 @@ public class IO {
     public String read() throws IOException  {
         currentLine = reader.readLine();
         if (currentLine == null) {
-            reader.close();
+            //reader.close();
             return "END";
         }
         lineno++;
@@ -68,7 +69,14 @@ public class IO {
         Props.addProp("lineno", Integer.toString(lineno));
         return currentLine;
     }
-    
+
+    /*
+    * This method is called  when a fatal runtime
+    * error happens such as being unable to call up methods from RuntimeMethods
+    * by reflection or during a failure of a runtime operation such as trying to
+    * redeclare an already defined variable etc.
+    */
+
     public void closeAndExit () throws IOException {
 	    reader.close();
 	    System.exit(1);

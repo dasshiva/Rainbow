@@ -1,18 +1,20 @@
 package rainbow.lang.parser;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import rainbow.lang.Props;
 import rainbow.lang.exception.ReaderException;
-import rainbow.lang.parser.exception.IllegalTypeException;
-import rainbow.lang.parser.exception.IllegalValueException;
-import rainbow.lang.parser.exception.SyntaxError;
+import rainbow.lang.parser.exception.*;
 
 import rainbow.lang.runtime.Exec;
 import rainbow.lang.runtime.Transform;
 
-public class TokenProcessor {
+import static rainbow.lang.Misc.StackTracePrinter;
+
+class TokenProcessor {
     private final Split sp;
     private final ArrayList<String> target = new ArrayList<>();
     private boolean fatalError;
@@ -30,16 +32,31 @@ public class TokenProcessor {
                 target.clear();
             }
         } catch (IOException e) {
-            throw new ReaderException(Props.getProp("-input"),e.getMessage());
+            throw new ReaderException(Props.getProp("input"),e.getMessage());
         }
     }
     private void parseList() {
 	if (target.size() == 0) return;
     else {
-        if (target.get(0).equals("set"))
-            parseSetStatement();
-        else if (target.get(0).equals("print"))
-            parsePrintStatement();
+        try {
+            String statType = target.get(0);
+            if (!validateKeyword(statType))
+                throw new IllegalStatementException(statType);
+            Class<?> tp = TokenProcessor.class;
+            String methodName = "parse" + target.get(0) + "Statement";
+            Method toCall = tp.getDeclaredMethod(methodName);
+            toCall.setAccessible(true);
+            toCall.invoke(this);
+        }
+        catch  (NoSuchMethodException | IllegalAccessException ex2) {
+            System.err.println("FATAL RUNTIME ERROR: " + ex2.getClass().toString() + " " + ex2.getMessage() + "\n"
+                    + "Tip: This is an internal error which means that its a bug(s) in the code. Please report this");
+            StackTracePrinter(ex2);
+            fatalError = true;
+        }
+        catch (InvocationTargetException ex1){
+            throw new ParserException(ex1.getCause().getMessage());
+        }
        }
     }
 
@@ -99,5 +116,12 @@ public class TokenProcessor {
            throw new SyntaxError("print statement body is incomplete : Missing the variable to print");
         Exec.exec(new Object[] 
 		{ Transform.transform("print"), target.get(1)}) ;
+    }
+
+    private boolean validateKeyword (String key) {
+        switch(key){
+            case "Set": case "Print": return true;
+            default: return false;
+        }
     }
 }

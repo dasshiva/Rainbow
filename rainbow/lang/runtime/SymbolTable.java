@@ -6,7 +6,7 @@ import rainbow.lang.parser.Types;
 
 import java.util.ArrayList;
 
-class SymbolTable {
+public class SymbolTable {
     private static ArrayList<String> identifiers = new ArrayList<>();
     private static ArrayList<Types> types = new ArrayList<>();
     private static ArrayList<Object> vals = new ArrayList<>();

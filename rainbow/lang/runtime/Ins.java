@@ -1,6 +1,5 @@
 package rainbow.lang.runtime;
 
 enum Ins {
-	INIT,
-	PRINT
+	INIT, PRINT, ADD
 }

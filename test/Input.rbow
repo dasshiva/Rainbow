@@ -1,4 +1,4 @@
-set int a 12
-set decimal b 12.69
-set string hello "Hello World"
-print hello
+Set int a 12
+Set decimal b 12.69
+Set string hello "Hello World"
+Print hello

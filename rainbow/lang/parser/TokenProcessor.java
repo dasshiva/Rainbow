@@ -11,6 +11,7 @@ import rainbow.lang.parser.exception.*;
 
 import rainbow.lang.runtime.Exec;
 import rainbow.lang.runtime.Transform;
+import rainbow.lang.runtime.SymbolTable;
 
 import static rainbow.lang.Misc.StackTracePrinter;
 
@@ -68,18 +69,7 @@ class TokenProcessor {
         for (int i=1;i<target.size();i++){ 
 	    String str = target.get(i);
             if (!haveType) {
-                switch(str) {
-                    case "int":
-                    type = Types.TYPE_INT;
-                    break;
-                    case "decimal":
-                    type = Types.TYPE_DECIMAL;
-                    break;
-                    case "string":
-                    type = Types.TYPE_STRING;
-                    break;
-                    default: throw new IllegalTypeException(str);
-                }
+                type = Types.transformToEnum(str);
                 haveType = true;
             }
             else if (!haveID) {
@@ -108,7 +98,7 @@ class TokenProcessor {
             }
         }
         if (!haveType || !haveID || !haveVal) 
-        throw new SyntaxError("init statement body is incomplete : Missing type , identifier or value");
+        throw new SyntaxError("Set statement body is incomplete : Missing type , identifier or value");
     }
 
     private void parsePrintStatement() {
@@ -117,11 +107,31 @@ class TokenProcessor {
         Exec.exec(new Object[] 
 		{ Transform.transform("print"), target.get(1)}) ;
     }
+    // TODO This method still has a major part of its implementation
+    // left which can only be completed after the cast statement's
+    // implementation is done
+    private void parseAddStatement() {
+	if(target.size()<2)
+	   throw new SyntaxError("Add statement body is incomplete : Missing operands");
+	Object[] args = new Object[target.size()];
+	args[0] = Transform.transform("add");
+    }
 
+    private void parseCastStatement() {
+	    boolean needID = false, needCastID = false;
+	    for (int i = 1; i < target.size(); i++){
+		    if (needID) {}
+		    else if (needCastID) {}
+		    else {
+			    
+		    }
+	    }
+    }
     private boolean validateKeyword (String key) {
         switch(key){
-            case "Set": case "Print": return true;
-            default: return false;
-        }
+		case "Set": case "Print": //case "Add" : 
+		case "Cast" : return true;
+		default: return false;
+	}
     }
 }

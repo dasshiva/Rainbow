@@ -1,5 +1,6 @@
 package rainbow.lang.parser;
 
+import rainbow.lang.parser.exception.IllegalTypeException;
 /* This enum contains all the possible data types supported by the language */
 public enum Types {
     TYPE_INT, /* internal representation of 'int' */
@@ -21,5 +22,17 @@ public enum Types {
             return "string";
             default: return null;
         }
+    }
+    public static Types transformToEnum (String target) {
+	    switch (target) {
+		    case "int":
+			    return TYPE_INT;
+		    case "decimal":
+			    return TYPE_DECIMAL;
+		    case "string":
+			    return TYPE_STRING;
+		    default:
+			    throw new IllegalTypeException(target);
+	    }
     }
 }

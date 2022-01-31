@@ -118,12 +118,22 @@ class TokenProcessor {
     }
 
     private void parseCastStatement() {
+	    Types ty = null , actualTy = null;
+	    String ID = null , castID = null;
 	    boolean needID = false, needCastID = false;
 	    for (int i = 1; i < target.size(); i++){
-		    if (needID) {}
+		    String read = target.get(i);
+		    if (needID) {
+			    ID = read;
+			    Types t = SymbolTable.getType(ID);
+			    if (t == ty)
+				    return;
+			    actualTy = t;
+		    }
 		    else if (needCastID) {}
 		    else {
-			    
+			    ty = Types.transformtoEnum(read);
+			    needID = true;
 		    }
 	    }
     }

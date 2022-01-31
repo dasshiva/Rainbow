@@ -24,4 +24,8 @@ public class SymbolTable {
         final int index = identifiers.lastIndexOf(sym);
         return new Object[] { types.get(index), vals.get(index)};
     }
+    public static Types getType (String sym){
+	    Object[] ret = getSymbol(sym);
+	    return (Types) ret[0];
+    }
 }

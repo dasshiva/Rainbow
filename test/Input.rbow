@@ -1,4 +1,4 @@
 Set int a 12
-Set decimal b 12.69
+Set a 20
 Set string hello "Hello World"
-Print hello
+Print a

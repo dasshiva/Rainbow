@@ -57,7 +57,8 @@ class TokenProcessor {
             fatalError = true;
         }
         catch (InvocationTargetException ex1){
-            throw new ParserException(ex1.getCause().getMessage());
+            RuntimeException e = (RuntimeException) ex1.getCause();
+	    throw e;
         }
        }
     }
@@ -67,6 +68,12 @@ class TokenProcessor {
         String ID = null;
         Object val = null;
         boolean haveType = false, haveID=false, haveVal = false;
+	if (target.size() == 3) {
+		ID = target.get(1);
+		val = target.get(2);
+		SymbolTable.modifySymbol(ID,val);
+		return;
+	}
         for (int i=1;i<target.size();i++){ 
 	    String str = target.get(i);
             if (!haveType) {

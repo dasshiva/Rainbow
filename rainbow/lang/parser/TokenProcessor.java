@@ -57,7 +57,7 @@ class TokenProcessor {
             error = true;
         }
         catch (InvocationTargetException ex1){
-	    System.out.println(ex1.getCause().getMessage().trim());
+	    System.out.println(ex1.getCause().getMessage());
 	    error = true;
         }
        }

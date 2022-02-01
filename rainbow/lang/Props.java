@@ -32,7 +32,7 @@ public class Props {
 
     /* 
     * Add a property to the system-wide properties list
-    * If a property of this name alreasy exist then it is overriden
+    * If a property of this name already exist then it is overriden
     */
 
     public static void addProp(String key,String val){

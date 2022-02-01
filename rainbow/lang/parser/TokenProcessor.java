@@ -19,14 +19,14 @@ import static rainbow.lang.Misc.StackTracePrinter;
 class TokenProcessor {
     private final Split sp;
     private final ArrayList<String> target = new ArrayList<>();
-    private boolean fatalError;
+    private boolean error;
     public TokenProcessor(Split sp) {
         this.sp = sp;
     }
     public void parseAll() {
         try {
             while(!sp.EOF()){
-                sp.getNext(fatalError);
+                sp.getNext(error);
                 while(sp.hasNext()) {
                     target.add(sp.next());
                 }
@@ -54,11 +54,11 @@ class TokenProcessor {
             System.err.println("FATAL RUNTIME ERROR: " + ex2.getClass().toString() + " " + ex2.getMessage() + "\n"
                     + "Tip: This is an internal error which means that its a bug(s) in the code. Please report this");
             StackTracePrinter(ex2);
-            fatalError = true;
+            error = true;
         }
         catch (InvocationTargetException ex1){
-            RuntimeException e = (RuntimeException) ex1.getCause();
-	    throw e;
+	    System.out.println(ex1.getCause().getMessage().trim());
+	    error = true;
         }
        }
     }
@@ -98,7 +98,7 @@ class TokenProcessor {
                     }
                     haveVal = true;
                     if (!Exec.exec(new Object[] { Transform.transform("init"),ID, type, val})) 
-				    fatalError = true;
+				    error = true;
                 }
                 catch (NumberFormatException e) {
                     throw new IllegalValueException(type, str);

@@ -13,10 +13,10 @@ public class ParserException extends BasicException  {
                 cause,hint));
     }
     public ParserException(String cause) {
-        super(String.format("\n%s\n%s:%d %s\n",
-                Props.getProp("line"),
+        super(String.format("%s:%d %s \nError: %s\n",
                 Props.getProp("input"),
                 Integer.parseInt(Props.getProp("lineno")),
+		Props.getProp("line"),
                 cause));
     }
 }

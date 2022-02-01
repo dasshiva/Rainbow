@@ -2,6 +2,7 @@ package rainbow.lang.runtime;
 
 import rainbow.lang.runtime.exception.DuplicateIdentifierException;
 import rainbow.lang.runtime.exception.NoSuchSymbolFoundException;
+import rainbow.lang.runtime.exception.InvalidSetException;
 import rainbow.lang.parser.Types;
 
 import java.util.ArrayList;
@@ -30,7 +31,13 @@ public class SymbolTable {
     }
     public static void modifySymbol (String sym,Object newVals) {
         symDefined(sym);
-        vals.set(identifiers.lastIndexOf(sym),newVals);
+	Types ty = getType(sym);
+	if (ty == Types.TYPE_STRING && newVals instanceof String
+	|| ty == Types.TYPE_DECIMAL && newVals instanceof Double 
+	|| ty == Types.TYPE_INT && newVals instanceof Integer)
+		vals.set(identifiers.lastIndexOf(sym),newVals);
+	else
+		throw new InvalidSetException(sym,ty,newVals.toString());
     }
     public static void symDefined (String sym) {
         if (!identifiers.contains(sym))

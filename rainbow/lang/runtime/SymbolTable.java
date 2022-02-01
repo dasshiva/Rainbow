@@ -21,7 +21,6 @@ public class SymbolTable {
     }
 
     private static Object[] getSymbol(String sym) {
-        symDefined(sym);
         final int index = identifiers.lastIndexOf(sym);
         return new Object[] { types.get(index), vals.get(index)};
     }
@@ -30,8 +29,7 @@ public class SymbolTable {
 	    return (Types) ret[0];
     }
     public static void modifySymbol (String sym,Object newVals) {
-        symDefined(sym);
-	Types ty = getType(sym);
+	Types ty = (Types) fetchIfDefined(sym,"Type");
 	if (ty == Types.TYPE_STRING && newVals instanceof String
 	|| ty == Types.TYPE_DECIMAL && newVals instanceof Double 
 	|| ty == Types.TYPE_INT && newVals instanceof Integer)
@@ -39,9 +37,19 @@ public class SymbolTable {
 	else
 		throw new InvalidSetException(sym,ty,newVals.toString());
     }
-    public static void symDefined (String sym) {
-        if (!identifiers.contains(sym))
-            throw new NoSuchSymbolFoundException(sym);
+    public static void isDefined(String sym){
+	    if (!identifiers.contains(sym))
+		    throw new NoSuchSymbolFoundException(sym);
+    }
+    public static Object fetchIfDefined (String sym,String what) {
+        isDefined(sym);
+	if (what.equals("Type"))
+		return getType(sym);
+	return getValue(sym);
+    }
+    public static Object[] fetchIfDefined (String sym){
+	    isDefined(sym);
+	    return getSymbol(sym);
     }
     public static Object getValue(String sym) {
         Object[] details = getSymbol(sym);

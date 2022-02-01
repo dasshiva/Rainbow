@@ -13,4 +13,9 @@ class RuntimeMethods {
 			System.out.println(sym.toString());
 		}
 	}
+	public static void ADD (Object[] args) {
+		for (int i = 1; i < args.length;) {
+			Object arg = args[i];
+		}
+	}
 }

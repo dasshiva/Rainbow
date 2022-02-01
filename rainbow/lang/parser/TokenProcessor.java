@@ -127,6 +127,9 @@ class TokenProcessor {
             throw new SyntaxError("Add statement body is incomplete : Missing operands");
         Object[] args = new Object[target.size()];
         args[0] = Transform.transform("add");
+	for (int i = 1; i < args.length ; i++) {
+		args[i] = target.get(i);
+	}
     }
 
     private void parseCastStatement() {
@@ -158,7 +161,7 @@ class TokenProcessor {
 		    }
 		    else if (needCastID) {
                 try {
-                    SymbolTable.symDefined(read);
+                    SymbolTable.isDefined(read);
                 }
                 catch (NoSuchSymbolFoundException e) {
                     Exec.exec(new Object[] { Transform.transform("init"), read, toType , newVal} );

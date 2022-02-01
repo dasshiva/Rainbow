@@ -12,6 +12,19 @@ public enum Types {
     * and it is used only for exception message formatting
     */
 
+    public static Types transformtoEnum(String target) {
+        switch (target) {
+            case "int":
+                return TYPE_INT;
+            case "decimal":
+                return TYPE_DECIMAL;
+            case "string":
+                return TYPE_STRING;
+            default:
+                throw new IllegalTypeException(target);
+        }
+    }
+
     public String transform() {
         switch(this){
             case TYPE_INT:
@@ -22,17 +35,5 @@ public enum Types {
             return "string";
             default: return null;
         }
-    }
-    public static Types transformToEnum (String target) {
-	    switch (target) {
-		    case "int":
-			    return TYPE_INT;
-		    case "decimal":
-			    return TYPE_DECIMAL;
-		    case "string":
-			    return TYPE_STRING;
-		    default:
-			    throw new IllegalTypeException(target);
-	    }
     }
 }

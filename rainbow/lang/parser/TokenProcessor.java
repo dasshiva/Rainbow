@@ -12,6 +12,7 @@ import rainbow.lang.parser.exception.*;
 import rainbow.lang.runtime.Exec;
 import rainbow.lang.runtime.Transform;
 import rainbow.lang.runtime.SymbolTable;
+import rainbow.lang.runtime.exception.NoSuchSymbolFoundException;
 
 import static rainbow.lang.Misc.StackTracePrinter;
 
@@ -69,7 +70,7 @@ class TokenProcessor {
         for (int i=1;i<target.size();i++){ 
 	    String str = target.get(i);
             if (!haveType) {
-                type = Types.transformToEnum(str);
+                type = Types.transformtoEnum(str);
                 haveType = true;
             }
             else if (!haveID) {
@@ -111,28 +112,50 @@ class TokenProcessor {
     // left which can only be completed after the cast statement's
     // implementation is done
     private void parseAddStatement() {
-	if(target.size()<2)
-	   throw new SyntaxError("Add statement body is incomplete : Missing operands");
-	Object[] args = new Object[target.size()];
-	args[0] = Transform.transform("add");
+        if(target.size()<2)
+            throw new SyntaxError("Add statement body is incomplete : Missing operands");
+        Object[] args = new Object[target.size()];
+        args[0] = Transform.transform("add");
     }
 
     private void parseCastStatement() {
-	    Types ty = null , actualTy = null;
-	    String ID = null , castID = null;
+	    Types toType = null;
+        Object newVal = null;
 	    boolean needID = false, needCastID = false;
 	    for (int i = 1; i < target.size(); i++){
 		    String read = target.get(i);
 		    if (needID) {
-			    ID = read;
-			    Types t = SymbolTable.getType(ID);
-			    if (t == ty)
+			    Types t = SymbolTable.getType(read);
+			    if (t == toType)
 				    return;
-			    actualTy = t;
+                if (t == Types.TYPE_STRING)
+                    throw new InvalidCastException(toType);
+			    else if (toType == Types.TYPE_STRING) {
+                    if (t == Types.TYPE_INT)
+                        newVal = Integer.toString((Integer)SymbolTable.getValue(read));
+                    else
+                        newVal = Double.toString((Double)SymbolTable.getValue(read));
+                }
+                else if (toType == Types.TYPE_INT) {
+                    System.err.println("WARNING : casting from integer to float will cause loss of precision!");
+                    newVal = ((Double)(SymbolTable.getValue(read))).intValue();
+                }
+                else
+                    newVal = ((Integer) SymbolTable.getValue(read)).doubleValue();
+                needCastID = true;
+                needID = false;
 		    }
-		    else if (needCastID) {}
+		    else if (needCastID) {
+                try {
+                    SymbolTable.symDefined(read);
+                }
+                catch (NoSuchSymbolFoundException e) {
+                    Exec.exec(new Object[] { Transform.transform("init"), read, toType , newVal} );
+                }
+                SymbolTable.modifySymbol(read,newVal);
+            }
 		    else {
-			    ty = Types.transformtoEnum(read);
+			    toType = Types.transformtoEnum(read);
 			    needID = true;
 		    }
 	    }
@@ -142,6 +165,6 @@ class TokenProcessor {
 		case "Set": case "Print": //case "Add" : 
 		case "Cast" : return true;
 		default: return false;
-	}
+        }
     }
 }

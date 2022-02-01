@@ -8,7 +8,7 @@ class RuntimeMethods {
 				(Types) args[2], args[3]);
 	}
 	public static void PRINT (Object[] args){
-		Object[] sym = SymbolTable.getSymbol((String)args[1]);
-		System.out.println(sym[1].toString());
+		Object sym = SymbolTable.getValue((String)args[1]);
+		System.out.println(sym.toString());
 	}
 }

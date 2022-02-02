@@ -1,4 +1,4 @@
-Set decimal a 12
-Set int b 20
+Set string a "World"
+Set string b "Hello "
 Add b a b
 Print b

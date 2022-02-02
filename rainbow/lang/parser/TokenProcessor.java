@@ -17,7 +17,7 @@ import static rainbow.lang.Misc.StackTracePrinter;
 class TokenProcessor {
     private final Split sp;
     private final ArrayList<String> target = new ArrayList<>();
-    private boolean error;
+    private boolean error, isRset;
     public TokenProcessor(Split sp) {
         this.sp = sp;
     }
@@ -60,7 +60,11 @@ class TokenProcessor {
         }
        }
     }
-
+    private void parseRSetStatement() {
+	    isRset = true;
+	    parseSetStatement();
+	    isRset = false;
+    }
     private void parseSetStatement() {
         Types type = null;
         String ID = null;
@@ -95,8 +99,14 @@ class TokenProcessor {
                         val = str;
                     }
                     haveVal = true;
-                    if (!Exec.exec(new Object[] { Ins.transform("init"),ID, type, val}))
+		    if(isRset) {
+			    if (!Exec.exec(new Object[] { Ins.transform("init"),ID, type, val,isRset}))
 				    error = true;
+		    }
+		    else {
+			    if (!Exec.exec(new Object[] { Ins.transform("init"),ID, type, val}))                   
+				    error = true;
+		    }
                 }
                 catch (NumberFormatException e) {
                     throw new IllegalValueException(type, str);
@@ -162,7 +172,7 @@ class TokenProcessor {
     private boolean validateKeyword (String key) {
         switch(key){
             case "Set": case "Print": case "Add" :
-                case "Cast" : return true;
+	    case "Cast" : case "RSet" : return true;
                 default: return false;
         }
     }

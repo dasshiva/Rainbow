@@ -6,7 +6,11 @@ import rainbow.lang.Props;
 
 public class RuntimeMethods {
 	public static void INIT (Object[] args) {
-		SymbolTable.addSymbol((String) args[1],
+		if (args.length == 5) 
+			SymbolTable.addSymbol((String) args[1],
+                                (Types) args[2], args[3], Attrs.ATTR_READONLY);
+		else 
+			SymbolTable.addSymbol((String) args[1],
 				(Types) args[2], args[3]);
 	}
 	public static void PRINT (Object[] args){

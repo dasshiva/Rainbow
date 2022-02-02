@@ -43,9 +43,9 @@ public class SymbolTable {
     }
     public static Object fetchIfDefined (String sym,String what) {
         isDefined(sym);
-	if (what.equals("Type"))
-		return getType(sym);
-	return getValue(sym);
+        if (what.equals("Type"))
+            return getType(sym);
+        return getValue(sym);
     }
     public static Object[] fetchIfDefined (String sym){
 	    isDefined(sym);

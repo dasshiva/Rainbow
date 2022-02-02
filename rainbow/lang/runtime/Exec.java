@@ -1,5 +1,6 @@
 package rainbow.lang.runtime;
 
+import rainbow.lang.exception.BasicException;
 import rainbow.lang.runtime.exception.RtException;
 
 import java.lang.reflect.InvocationTargetException;
@@ -18,8 +19,15 @@ public class Exec {
 			return true;
 		}
 		catch (InvocationTargetException ex1) {
-			System.out.println(ex1.getCause().getMessage().trim());
-			return false;
+			if (ex1.getCause() instanceof BasicException)
+				throw (BasicException) ex1.getCause();
+			else {
+				System.err.println("FATAL RUNTIME ERROR: " + ex1.getCause().getClass() + " " + ex1.getCause().getMessage() + "\n"
+						+ "Tip: This is an internal error which means that its a bug(s) in the code. Please report this");
+				StackTracePrinter(ex1.getCause());
+				return false;
+			}
+
 		}
 		catch (Exception ex2) {
 			System.err.println("FATAL RUNTIME ERROR: " +

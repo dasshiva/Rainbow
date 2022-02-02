@@ -57,8 +57,8 @@ class TokenProcessor {
             error = true;
         }
         catch (InvocationTargetException ex1){
-	    System.out.println(ex1.getCause().getMessage());
-	    error = true;
+            System.out.println(ex1.getCause().getMessage());
+            error = true;
         }
        }
     }
@@ -119,17 +119,15 @@ class TokenProcessor {
         }
         Exec.exec(args);
     }
-    // TODO This method still has a major part of its implementation
-    // left which can only be completed after the cast statement's
-    // implementation is done
     private void parseAddStatement() {
         if(target.size()<2)
             throw new SyntaxError("Add statement body is incomplete : Missing operands");
         Object[] args = new Object[target.size()];
         args[0] = Transform.transform("add");
-	for (int i = 1; i < args.length ; i++) {
-		args[i] = target.get(i);
-	}
+        for (int i = 1; i < args.length ; i++) {
+            args[i] = target.get(i);
+        }
+        Exec.exec(args);
     }
 
     private void parseCastStatement() {
@@ -176,7 +174,7 @@ class TokenProcessor {
     }
     private boolean validateKeyword (String key) {
         switch(key){
-		case "Set": case "Print": //case "Add" : 
+		case "Set": case "Print": case "Add" :
 		case "Cast" : return true;
 		default: return false;
         }

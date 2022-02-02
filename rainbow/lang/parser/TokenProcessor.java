@@ -10,6 +10,7 @@ import rainbow.lang.exception.ReaderException;
 import rainbow.lang.parser.exception.*;
 
 import rainbow.lang.runtime.Exec;
+import rainbow.lang.runtime.RuntimeMethods;
 import rainbow.lang.runtime.Transform;
 import rainbow.lang.runtime.SymbolTable;
 import rainbow.lang.runtime.exception.NoSuchSymbolFoundException;
@@ -142,18 +143,7 @@ class TokenProcessor {
 				    return;
                 if (t == Types.TYPE_STRING)
                     throw new InvalidCastException(toType);
-			    else if (toType == Types.TYPE_STRING) {
-                    if (t == Types.TYPE_INT)
-                        newVal = Integer.toString((Integer)SymbolTable.getValue(read));
-                    else
-                        newVal = Double.toString((Double)SymbolTable.getValue(read));
-                }
-                else if (toType == Types.TYPE_INT) {
-                    System.err.println("WARNING : casting from integer to float will cause loss of precision!");
-                    newVal = ((Double)(SymbolTable.getValue(read))).intValue();
-                }
-                else
-                    newVal = ((Integer) SymbolTable.getValue(read)).doubleValue();
+			    newVal = RuntimeMethods.CAST(new Object[]{t,toType,read});
                 needCastID = true;
                 needID = false;
 		    }

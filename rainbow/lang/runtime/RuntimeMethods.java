@@ -3,7 +3,7 @@ package rainbow.lang.runtime;
 import rainbow.lang.parser.Types;
 import rainbow.lang.parser.exception.InvalidCastException;
 
-class RuntimeMethods {
+public class RuntimeMethods {
 	public static void INIT (Object[] args) {
 		SymbolTable.addSymbol((String) args[1],
 				(Types) args[2], args[3]);

@@ -2,6 +2,7 @@ package rainbow.lang.runtime;
 
 import rainbow.lang.parser.Types;
 import rainbow.lang.parser.exception.InvalidCastException;
+import rainbow.lang.Props;
 
 public class RuntimeMethods {
 	public static void INIT (Object[] args) {
@@ -21,7 +22,8 @@ public class RuntimeMethods {
 		else if ((Types) args[0] == Types.TYPE_INT && (Types) args[1] == Types.TYPE_DECIMAL)
 			return ((Integer)SymbolTable.getValue((String) args[2])).doubleValue();
 		else if ((Types) args[0] == Types.TYPE_DECIMAL && (Types) args[1] == Types.TYPE_INT) {
-			System.out.println("WARNING : Casting from decimal to int will cause loss of precision");
+			if (!(Props.getProp("no-warn").equals("T")))
+				System.out.println("WARNING : Casting from decimal to int will cause loss of precision");
 			return ((Double)SymbolTable.getValue((String) args[2])).intValue();
 		}
 		else

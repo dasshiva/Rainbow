@@ -1,4 +1,4 @@
-Set int a 12
+Set decimal a 12
 Set int b 20
 Add b a b
 Print b

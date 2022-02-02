@@ -16,13 +16,15 @@ public class CommandParser {
     /* 
     * An enum which describes the various categories of options.
     * NEED_ARGS describes a command-line option that needs an arguement (eg. -input)
+    * NO_NEED_ARGS describes a command-line arguement that does 
+    * not need arguements (eg. -no-warn)
     * STOP_HERE describes a command-line arguement where the program
     * needs to display some text and exit immediately (eg. -version)
     */
 
     private enum OptionType {
         NEED_ARGS,
-        // NO_NEED_ARGS,
+        NO_NEED_ARGS,
         STOP_HERE
     }
 
@@ -31,6 +33,9 @@ public class CommandParser {
 
     /* The options which are described by NEED_ARGS */
     private final String[] argOpts = {"-input"};
+
+    /* The options which are described by NO_NEED_ARGS */
+    private final String[] noArgOpts = {"-no-warn"};
 
     public CommandParser(String[] args){
 
@@ -45,7 +50,7 @@ public class CommandParser {
     }
     /* Parse all the commad-line arguements and set the global properties */
     public void parseAll(){
-        /* stores the current option */
+        /* stores the current option without the '-' */
         String currentOption=null;
 
         /* true if currentOption is an option that needs arguements */
@@ -64,13 +69,14 @@ public class CommandParser {
                 OptionType ty;
                 if ((ty=isValidOption(each))!=null){
                     currentOption=each.substring(1);
-                    if (ty==OptionType.NEED_ARGS){
-                        needArgs=true;
-                    }
+                    if (ty==OptionType.NO_NEED_ARGS)
+                        Props.addProp(currentOption,"T");
                     else if (ty==OptionType.STOP_HERE){
                         System.out.println(Props.getProp(currentOption));
                         System.exit(0);
                     }
+		    else 
+			    needArgs = true;
                 }
                 else
                     throw new InvalidOptionException(each);
@@ -104,6 +110,12 @@ public class CommandParser {
             if (each.equals(str))
                 return OptionType.STOP_HERE;
         }
+
+	for (String each:noArgOpts) {
+		if(each.equals(str))
+			return OptionType.NO_NEED_ARGS;
+	}
+
         for (String each:argOpts){
             if (each.equals(str))
                 return OptionType.NEED_ARGS;

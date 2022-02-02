@@ -34,6 +34,10 @@ class TokenProcessor {
         } catch (IOException e) {
             throw new ReaderException(Props.getProp("input"),e.getMessage());
         }
+	catch (ParserException e) {
+		System.out.println(e.getMessage().trim());
+		error = true;
+	}
     }
     private void parseList() {
 	if (target.size() == 0) return;

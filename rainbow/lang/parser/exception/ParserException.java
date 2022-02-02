@@ -5,7 +5,7 @@ import rainbow.lang.exception.BasicException;
 
 public class ParserException extends BasicException  {
     public ParserException(String cause,String hint){
-        super(String.format("\n%s\n%s:%d %s\n" +
+        super(String.format("\n%s\n%s:%d %s" +
                         "Were you trying to : %s ?",
                 Props.getProp("line"),
                 Props.getProp("input"),

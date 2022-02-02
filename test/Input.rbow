@@ -1,5 +1,4 @@
 # This is a program
 Set string a "World"
-RSet string b 12
-Add b a b
-Print b
+RSet string b "Hello"
+Pr

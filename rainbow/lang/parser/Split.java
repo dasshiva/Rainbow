@@ -111,12 +111,14 @@ class Split implements Iterator<String> {
 		toParse = "";
 		int temp, index = -1;
 		/* loop until the string is not a comment */
-		while ((temp = Comment.commentIndex(toParse)) == 0) {
-			toParse = src.read() + ' ';
-			System.out.println(temp);
-			index = temp;
-		}
 		toParse = src.read() + ' ';
+		index = Comment.commentIndex(toParse);
+		if (index == 0) {
+			while(index == 0) {
+				toParse = src.read() + ' ';
+				index = Comment.commentIndex(toParse);
+			}
+		}
 		/* if toParse is the special END token then we have reached EOF */
 		if (checkEOFString(toParse)) {
 			isFinished = true;

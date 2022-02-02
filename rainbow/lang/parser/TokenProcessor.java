@@ -9,10 +9,7 @@ import rainbow.lang.Props;
 import rainbow.lang.exception.ReaderException;
 import rainbow.lang.parser.exception.*;
 
-import rainbow.lang.runtime.Exec;
-import rainbow.lang.runtime.RuntimeMethods;
-import rainbow.lang.runtime.Transform;
-import rainbow.lang.runtime.SymbolTable;
+import rainbow.lang.runtime.*;
 import rainbow.lang.runtime.exception.NoSuchSymbolFoundException;
 
 import static rainbow.lang.Misc.StackTracePrinter;
@@ -98,7 +95,7 @@ class TokenProcessor {
                         val = str;
                     }
                     haveVal = true;
-                    if (!Exec.exec(new Object[] { Transform.transform("init"),ID, type, val})) 
+                    if (!Exec.exec(new Object[] { Ins.transform("init"),ID, type, val}))
 				    error = true;
                 }
                 catch (NumberFormatException e) {
@@ -114,7 +111,7 @@ class TokenProcessor {
         if(target.size()<2)
            throw new SyntaxError("print statement body is incomplete : Missing the variable to print");
         Object[] args = new Object[target.size()];
-        args[0] = Transform.transform("print");
+        args[0] = Ins.transform("print");
         for (int i = 1; i < target.size(); i++) {
             args[i] = target.get(i);
         }
@@ -124,7 +121,7 @@ class TokenProcessor {
         if(target.size()<2)
             throw new SyntaxError("Add statement body is incomplete : Missing operands");
         Object[] args = new Object[target.size()];
-        args[0] = Transform.transform("add");
+        args[0] = Ins.transform("add");
         for (int i = 1; i < args.length ; i++) {
             args[i] = target.get(i);
         }
@@ -152,7 +149,7 @@ class TokenProcessor {
                     SymbolTable.isDefined(read);
                 }
                 catch (NoSuchSymbolFoundException e) {
-                    Exec.exec(new Object[] { Transform.transform("init"), read, toType , newVal} );
+                    Exec.exec(new Object[]{Ins.transform("init"), read,toType,newVal});
                 }
                 SymbolTable.modifySymbol(read,newVal);
             }
@@ -164,9 +161,9 @@ class TokenProcessor {
     }
     private boolean validateKeyword (String key) {
         switch(key){
-		case "Set": case "Print": case "Add" :
-		case "Cast" : return true;
-		default: return false;
+            case "Set": case "Print": case "Add" :
+                case "Cast" : return true;
+                default: return false;
         }
     }
 }

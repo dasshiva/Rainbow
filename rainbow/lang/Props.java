@@ -18,7 +18,7 @@ public class Props {
             "-version                  Print version information\n" +
             "-input                    Specify the file to be read\n" +
 	    "-no-warn                  Disable all runtime warnings\n" +
-	    "If -input is not provided, then the first argument is assumed to be the file";
+	    "If -input is not provided, then the first argument is assumed to be the file to be read";
 
     /* This class cannot be initialized */
     private Props() {}

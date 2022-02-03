@@ -70,5 +70,9 @@ public class SymbolTable {
 	    Object[] details = getSymbol(sym);                       
 	    return details[2];
     }
+    public static void checkReadonly(Object sym) {
+        if (SymbolTable.fetchIfDefined((String)sym,"Attr") == Attrs.ATTR_READONLY)
+            throw new ConstantModificationException((String) sym);
+    }
 
 }

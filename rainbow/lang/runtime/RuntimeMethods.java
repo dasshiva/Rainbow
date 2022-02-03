@@ -21,11 +21,11 @@ public class RuntimeMethods {
 	}
 	public static Object CAST (Object[] args){
 		Object ret = null;
-		if ((Types)args[0] == Types.TYPE_STRING)
+		if (args[0] == Types.TYPE_STRING)
 			throw new InvalidCastException((Types) args[1]);
-		else if ((Types) args[0] == Types.TYPE_INT && (Types) args[1] == Types.TYPE_DECIMAL)
+		else if (args[0] == Types.TYPE_INT && (Types) args[1] == Types.TYPE_DECIMAL)
 			return ((Integer)SymbolTable.getValue((String) args[2])).doubleValue();
-		else if ((Types) args[0] == Types.TYPE_DECIMAL && (Types) args[1] == Types.TYPE_INT) {
+		else if (args[0] == Types.TYPE_DECIMAL && (Types) args[1] == Types.TYPE_INT) {
 			if (!(Props.getProp("no-warn").equals("T")))
 				System.out.println("WARNING : Casting from decimal to int will cause loss of precision");
 			return ((Double)SymbolTable.getValue((String) args[2])).intValue();
@@ -34,7 +34,8 @@ public class RuntimeMethods {
 			return args[2].toString();
 	}
 	public static void ADD (Object[] args) {
-		Types ty = (Types) SymbolTable.fetchIfDefined((String) args[args.length -1],"Type"),temp;
+		SymbolTable.checkReadonly(args[args.length - 1]);
+		Types ty = SymbolTable.getType((String) args[args.length - 1]) , temp;
 		int isum = 0;
 		double dsum = 0.0;
 		String finalString = "";
@@ -68,5 +69,8 @@ public class RuntimeMethods {
 			else
 				finalString = finalString.concat((String) details[1]);
 		}
+	}
+	public static void SUB (Object[] args) {
+		SymbolTable.checkReadonly(args[args.length - 1]);
 	}
 }

@@ -104,11 +104,11 @@ class TokenProcessor {
                     }
                     haveVal = true;
 		    if(isRset) {
-			    if (!Exec.exec(new Object[] { Ins.transform("init"),ID, type, val,isRset}))
+			    if (!Exec.exec(new Object[] { Ins.transform("Set"),ID, type, val, true}))
 				    error = true;
 		    }
 		    else {
-			    if (!Exec.exec(new Object[] { Ins.transform("init"),ID, type, val}))                   
+			    if (!Exec.exec(new Object[] { Ins.transform(target.get(0)),ID, type, val}))
 				    error = true;
 		    }
                 }
@@ -123,25 +123,34 @@ class TokenProcessor {
 
     private void parsePrintStatement() {
         if(target.size()<2)
-           throw new SyntaxError("print statement body is incomplete : Missing the variable to print");
+           throw new InsufficientArguementException(target.get(0),1,0);
         Object[] args = new Object[target.size()];
-        args[0] = Ins.transform("print");
+        args[0] = Ins.transform(target.get(0));
         for (int i = 1; i < target.size(); i++) {
             args[i] = target.get(i);
         }
         Exec.exec(args);
     }
     private void parseAddStatement() {
-        if(target.size()<2)
-            throw new SyntaxError("Add statement body is incomplete : Missing operands");
+        if(target.size()<4)
+            throw new InsufficientArguementException(target.get(0), 3,target.size()-1);
         Object[] args = new Object[target.size()];
-        args[0] = Ins.transform("add");
+        args[0] = Ins.transform(target.get(0));
         for (int i = 1; i < args.length ; i++) {
             args[i] = target.get(i);
         }
         Exec.exec(args);
     }
-
+    private void parseSubStatement () {
+        if(target.size()<4)
+            throw new InsufficientArguementException(target.get(0), 3,target.size()-1);
+        Object[] ar = new Object[4];
+        ar[0] = Ins.transform(target.get(0));
+        for (int i = 1; i<4 ; i++) {
+            ar[i] = target.get(i);
+        }
+        Exec.exec(ar);
+    }
     private void parseCastStatement() {
 	    Types toType = null;
         Object newVal = null;
@@ -163,7 +172,7 @@ class TokenProcessor {
                     SymbolTable.isDefined(read);
                 }
                 catch (NoSuchSymbolFoundException e) {
-                    Exec.exec(new Object[]{Ins.transform("init"), read,toType,newVal});
+                    Exec.exec(new Object[]{Ins.transform("Set"), read,toType,newVal});
                 }
                 SymbolTable.modifySymbol(read,newVal);
             }

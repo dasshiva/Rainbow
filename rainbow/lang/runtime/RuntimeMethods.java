@@ -72,5 +72,17 @@ public class RuntimeMethods {
 	}
 	public static void SUB (Object[] args) {
 		SymbolTable.checkReadonly(args[args.length - 1]);
+		Types resTy = (Types) SymbolTable.getType((String) args[args.length -1]);
+		int ires = 0 ;
+		double dres = 0.0;
+		boolean intres = false, doubleres = false;
+		if (resTy == Types.TYPE_INT)
+			intres = true;
+		else if (resTy == Types.TYPE_DECIMAL)
+			doubleres = true;
+		else {}
+		for (int i = 1; i < args.length ; i++) {
+
+		}
 	}
 }

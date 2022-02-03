@@ -16,8 +16,9 @@ public class Props {
             "Available options include :\n"+
             "-help                     Print this help menu\n"+
             "-version                  Print version information\n" +
-            "-input (mandatory option) Specify the file to be parsed\n" +
-	    "-no-warn                  Disable all runtime warnings";
+            "-input                    Specify the file to be read\n" +
+	    "-no-warn                  Disable all runtime warnings\n" +
+	    "If -input is not provided, then the first argument is assumed to be the file";
 
     /* This class cannot be initialized */
     private Props() {}

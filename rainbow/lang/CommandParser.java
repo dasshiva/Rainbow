@@ -88,6 +88,8 @@ public class CommandParser {
         }
         if (needArgs)
             throw new NoArgException("-"+currentOption);
+	else if (Props.getProp("input") == null) 
+		Props.addProp("input",args[0]);
     }
 
     /* 

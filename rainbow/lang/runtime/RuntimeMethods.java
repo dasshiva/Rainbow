@@ -3,6 +3,7 @@ package rainbow.lang.runtime;
 import rainbow.lang.parser.Types;
 import rainbow.lang.parser.exception.InvalidCastException;
 import rainbow.lang.Props;
+import rainbow.lang.runtime.exception.InvalidArguementException;
 
 public class RuntimeMethods {
 	public static void INIT (Object[] args) {
@@ -27,7 +28,7 @@ public class RuntimeMethods {
 		else if (args[0] == Types.TYPE_DECIMAL && args[1] == Types.TYPE_INT) {
 			if (!(Props.getProp("no-warn").equals("T")))
 				System.out.println("WARNING : Casting from decimal to int will cause loss of precision");
-			return ((Double)SymbolTable.getValue((String) args[2])).intValue();
+			return ((Double) SymbolTable.getValue((String) args[2])).intValue();
 		}
 		else
 			return args[2].toString();
@@ -74,12 +75,12 @@ public class RuntimeMethods {
 		Types resTy = SymbolTable.getType((String) args[args.length -1]);
 		int ires = 0 ;
 		double dres = 0.0;
-		boolean intres = false, doubleres = false;
+		boolean intres = false;
 		if (resTy == Types.TYPE_INT)
 			intres = true;
-		else if (resTy == Types.TYPE_DECIMAL)
-			doubleres = true;
-		else {}
+		else if (resTy == Types.TYPE_DECIMAL) {}
+		else
+			throw new InvalidArguementException("string","Sub");
 		Object[] op1 = SymbolTable.fetchIfDefined((String) args[1]);
 		Object[] op2 = SymbolTable.fetchIfDefined((String) args[2]);
 		if (intres) {

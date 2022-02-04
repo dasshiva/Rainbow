@@ -30,6 +30,7 @@ public class Props {
     public static void initProps(){
         props.setProperty("version","0.0.8");
         props.setProperty("help","Rainbow " + props.getProperty("version") + "\n" + helpString);
+        props.setProperty("no-warn","F");
     }
 
     /* 

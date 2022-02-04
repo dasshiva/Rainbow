@@ -185,7 +185,7 @@ class TokenProcessor {
     private boolean validateKeyword (String key) {
         switch(key){
             case "Set": case "Print": case "Add" :
-	    case "Cast" : case "RSet" : return true;
+                case "Cast" : case "RSet" : case "Sub" : return true;
                 default: return false;
         }
     }

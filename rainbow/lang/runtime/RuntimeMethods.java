@@ -20,12 +20,11 @@ public class RuntimeMethods {
 		}
 	}
 	public static Object CAST (Object[] args){
-		Object ret = null;
 		if (args[0] == Types.TYPE_STRING)
 			throw new InvalidCastException((Types) args[1]);
-		else if (args[0] == Types.TYPE_INT && (Types) args[1] == Types.TYPE_DECIMAL)
+		else if (args[0] == Types.TYPE_INT && args[1] == Types.TYPE_DECIMAL)
 			return ((Integer)SymbolTable.getValue((String) args[2])).doubleValue();
-		else if (args[0] == Types.TYPE_DECIMAL && (Types) args[1] == Types.TYPE_INT) {
+		else if (args[0] == Types.TYPE_DECIMAL && args[1] == Types.TYPE_INT) {
 			if (!(Props.getProp("no-warn").equals("T")))
 				System.out.println("WARNING : Casting from decimal to int will cause loss of precision");
 			return ((Double)SymbolTable.getValue((String) args[2])).intValue();
@@ -72,7 +71,7 @@ public class RuntimeMethods {
 	}
 	public static void SUB (Object[] args) {
 		SymbolTable.checkReadonly(args[args.length - 1]);
-		Types resTy = (Types) SymbolTable.getType((String) args[args.length -1]);
+		Types resTy = SymbolTable.getType((String) args[args.length -1]);
 		int ires = 0 ;
 		double dres = 0.0;
 		boolean intres = false, doubleres = false;
@@ -81,13 +80,22 @@ public class RuntimeMethods {
 		else if (resTy == Types.TYPE_DECIMAL)
 			doubleres = true;
 		else {}
-		for (int i = 1; i < args.length ; i++) {
-			String sym = args[i];
-			Object[] details = SymbolTable.fetchIfDefined(sym);
-			if ((Types) details[0] != resTy) {
-				if (intres)
-					ires = ((Integer) CAST(new Object[] { details[0], resTy, details[1])).intValue();
-			}
+		Object[] op1 = SymbolTable.fetchIfDefined((String) args[1]);
+		Object[] op2 = SymbolTable.fetchIfDefined((String) args[2]);
+		if (intres) {
+			ires = (Integer) castIfNeeded((Types) op1[0], resTy, op1[1]) -
+					(Integer) castIfNeeded((Types) op2[0], resTy, op2[1]);
+			SymbolTable.modifySymbol((String) args[args.length - 1] , ires);
 		}
+		else {
+			dres = (Double) castIfNeeded((Types) op1[0], resTy , op1[1]) -
+					(Double) castIfNeeded((Types) op2[0], resTy , op2[1]);
+			SymbolTable.modifySymbol((String) args[args.length - 1] , dres);
+		}
+	}
+	private static Object castIfNeeded (Types from , Types to , Object toCast) {
+		if (from != to)
+			return CAST(new Object[] { from,to,toCast } );
+		return toCast;
 	}
 }

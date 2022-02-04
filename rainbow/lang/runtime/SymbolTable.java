@@ -28,7 +28,7 @@ public class SymbolTable {
 
     private static Object[] getSymbol(String sym) {
         final int index = identifiers.lastIndexOf(sym);
-        return new Object[] { types.get(index),vals.get(index),attrs.get(index)};
+        return new Object[] { types.get(index),vals.get(index) , attrs.get(index)};
     }
     public static Types getType (String sym){
 	    Object[] ret = getSymbol(sym);
@@ -56,7 +56,7 @@ public class SymbolTable {
             return getType(sym);
 	else if (what.equals("Attr"))
 	    return getAttr(sym);
-        return getValue(sym);
+    return getValue(sym);
     }
     public static Object[] fetchIfDefined (String sym){
 	    isDefined(sym);

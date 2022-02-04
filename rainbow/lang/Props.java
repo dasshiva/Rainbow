@@ -28,7 +28,7 @@ public class Props {
     * It is called only once by main()
     */
     public static void initProps(){
-        props.setProperty("version","0.0.8");
+        props.setProperty("version","0.0.8a");
         props.setProperty("help","Rainbow " + props.getProperty("version") + "\n" + helpString);
         props.setProperty("no-warn","F");
     }

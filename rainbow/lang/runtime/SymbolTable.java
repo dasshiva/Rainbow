@@ -27,6 +27,7 @@ public class SymbolTable {
     }
 
     private static Object[] getSymbol(String sym) {
+        isDefined(sym);
         final int index = identifiers.lastIndexOf(sym);
         return new Object[] { types.get(index),vals.get(index) , attrs.get(index)};
     }

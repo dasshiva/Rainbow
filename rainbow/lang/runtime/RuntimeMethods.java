@@ -28,7 +28,20 @@ public class RuntimeMethods {
 		else if (args[0] == Types.TYPE_DECIMAL && args[1] == Types.TYPE_INT) {
 			if (!(Props.getProp("no-warn").equals("T")))
 				System.out.println("WARNING : Casting from decimal to int will cause loss of precision");
-			return ((Double) SymbolTable.getValue((String) args[2])).intValue();
+			return ((Double) SymbolTable.getValue((args[2]).toString())).intValue();
+		}
+		else
+			return args[2].toString();
+	}
+	public static Object SIMPLECAST (Object[] args) {
+		if (args[0] == Types.TYPE_STRING)
+			throw new InvalidCastException((Types) args[1]);
+		else if (args[0] == Types.TYPE_INT && args[1] == Types.TYPE_DECIMAL)
+			return ((Integer) args[2]).doubleValue();
+		else if (args[0] == Types.TYPE_DECIMAL && args[1] == Types.TYPE_INT) {
+			if (!(Props.getProp("no-warn").equals("T")))
+				System.out.println("WARNING : Casting from decimal to int will cause loss of precision");
+			return ((Double) args[2]).intValue();
 		}
 		else
 			return args[2].toString();
@@ -45,8 +58,10 @@ public class RuntimeMethods {
 		else if (ty == Types.TYPE_DECIMAL)
 			doubleSum = true;
 		for (int i = 1; i < args.length; i++) {
-			if (i == args.length-1)
+			if (i == args.length-1) {
 				lastIter = true;
+				continue;
+			}
 			Object arg = args[i];
 			if (lastIter) {
 				if (intSum)
@@ -59,13 +74,11 @@ public class RuntimeMethods {
 			}
 			Object[] details = SymbolTable.fetchIfDefined(arg.toString());
 			temp = (Types) details[0];
-			if (ty != temp) {
-				details[1] = CAST(new Object[] {temp,ty,arg} );
-			}
+			details[i] = castIfNeeded(temp,ty,arg);
 			if (intSum)
-				isum += (Integer) details[1];
+				isum += (Integer) details[i];
 			else if (doubleSum)
-				dsum += (Double) details[1];
+				dsum += Double.parseDouble(SymbolTable.getValue(details[i].toString()).toString());
 			else
 				finalString = finalString.concat((String) details[1]);
 		}
@@ -96,7 +109,7 @@ public class RuntimeMethods {
 	}
 	private static Object castIfNeeded (Types from , Types to , Object toCast) {
 		if (from != to)
-			return CAST(new Object[] { from,to,toCast } );
+			return SIMPLECAST(new Object[] { from,to,toCast } );
 		return toCast;
 	}
 }

@@ -60,7 +60,8 @@ public class SymbolTable {
     }
     public static Object[] fetchIfDefined (String sym){
 	    isDefined(sym);
-	    return getSymbol(sym);
+	    Object[] dets = getSymbol(sym);
+	    return new Object[] { dets[0], dets[1] };
     }
     public static Object getValue(String sym) {
         Object[] details = getSymbol(sym);

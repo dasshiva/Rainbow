@@ -82,7 +82,12 @@ public class RuntimeMethods {
 			doubleres = true;
 		else {}
 		for (int i = 1; i < args.length ; i++) {
-
+			String sym = args[i];
+			Object[] details = SymbolTable.fetchIfDefined(sym);
+			if ((Types) details[0] != resTy) {
+				if (intres)
+					ires = ((Integer) CAST(new Object[] { details[0], resTy, details[1])).intValue();
+			}
 		}
 	}
 }

@@ -4,6 +4,7 @@ import rainbow.lang.parser.Types;
 import rainbow.lang.parser.exception.InvalidCastException;
 import rainbow.lang.Props;
 import rainbow.lang.runtime.exception.InvalidArguementException;
+import rainbow.lang.runtime.exception.ZeroDivisionException;
 import java.util.Arrays;
 
 public class RuntimeMethods {
@@ -156,7 +157,10 @@ public class RuntimeMethods {
 		else    
 			throw new InvalidArguementException("string","Sub");  
 		Object[] op1 = SymbolTable.fetchIfDefined((String) args[1]);
-		Object[] op2 = SymbolTable.fetchIfDefined((String) args[2]);  
+		Object[] op2 = SymbolTable.fetchIfDefined((String) args[2]); 
+		if (op2[1] instanceof Integer && (int)op2[1] == 0 ||
+		op2[1] instanceof Double && (double)op2[1] == 0.0)
+			throw new ZeroDivisionException((String) args[2]);
 		if (intres) {    
 			ires = (Integer) castIfNeeded((Types) op1[0], resTy, op1[1]) /(Integer) castIfNeeded((Types) op2[0], resTy, op2[1]);
 			SymbolTable.modifySymbol((String) args[args.length - 1] , ires);

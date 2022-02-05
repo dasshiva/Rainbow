@@ -9,7 +9,7 @@ As mentioned above a Rainbow lang program is a collection of statements having a
 ``
 STATEMENT-TYPE ARGS
 ``
-Here, "STATEMENT-TYPE" refers to any statement type which describes what that statement actually does and "ARGS" refer to arguements that are given to the keyword. For example :\
+\Here, "STATEMENT-TYPE" refers to any statement type which describes what that statement actually does and "ARGS" refer to arguements that are given to the keyword. For example :\
 ``
 Set int a 4
 ``

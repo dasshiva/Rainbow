@@ -80,13 +80,45 @@ public class RuntimeMethods {
 			temp = (Types) details[0];
 			details[1] = CAST(new Object[]{temp,ty,arg});
 			if (intSum)
-				isum += (Integer) details[1];
+				isum += Integer.parseInt(details[1].toString());
 			else if (doubleSum)
 				dsum += Double.parseDouble( details[1].toString());
 			else
 				finalString = finalString.concat((String) details[1]);
 		}
 	}
+	public static void MUL (Object[] args) {
+		SymbolTable.checkReadonly(args[args.length - 1]);
+		Types ty = SymbolTable.getType((String) args[args.length - 1]) , temp;         
+		int isum = 1;
+		double dsum = 1.0;   
+		boolean lastIter = false, intSum = false, doubleSum = false;   
+		if (ty == Types.TYPE_INT)  
+			intSum = true;       
+		else if (ty == Types.TYPE_DECIMAL)     
+			doubleSum = true; 
+		else 
+			throw new InvalidArguementException("string","Sub");
+		for (int i = 1; i < args.length; i++) {
+			if (i == args.length-1)
+				lastIter = true;
+			Object arg = args[i]; 
+			if (lastIter) {
+				if (intSum)
+					SymbolTable.modifySymbol((String) arg, isum);
+				else 
+					SymbolTable.modifySymbol((String) arg, dsum);     
+				return;
+			}    
+			Object[] details = SymbolTable.fetchIfDefined(arg.toString()); 
+			temp = (Types) details[0];
+			details[1] = CAST(new Object[]{temp,ty,arg});
+			if (intSum)
+				isum *= Integer.parseInt(details[1].toString());
+			else 
+				dsum *= Double.parseDouble( details[1].toString());
+                }
+        }
 	public static void SUB (Object[] args) {
 		SymbolTable.checkReadonly(args[args.length - 1]);
 		Types resTy = SymbolTable.getType((String) args[args.length -1]);
@@ -111,6 +143,30 @@ public class RuntimeMethods {
 			SymbolTable.modifySymbol((String) args[args.length - 1] , dres);
 		}
 	}
+
+	public static void DIV (Object[] args) { 
+		SymbolTable.checkReadonly(args[args.length - 1]);
+		Types resTy = SymbolTable.getType((String) args[args.length -1]); 
+		int ires = 0 ; 
+		double dres = 0.0; 
+		boolean intres = false;
+		if (resTy == Types.TYPE_INT)          
+			intres = true; 
+		else if (resTy == Types.TYPE_DECIMAL) {}      
+		else    
+			throw new InvalidArguementException("string","Sub");  
+		Object[] op1 = SymbolTable.fetchIfDefined((String) args[1]);
+		Object[] op2 = SymbolTable.fetchIfDefined((String) args[2]);  
+		if (intres) {    
+			ires = (Integer) castIfNeeded((Types) op1[0], resTy, op1[1]) /(Integer) castIfNeeded((Types) op2[0], resTy, op2[1]);
+			SymbolTable.modifySymbol((String) args[args.length - 1] , ires);
+		} 
+		else {
+			dres = (Double) castIfNeeded((Types) op1[0], resTy , op1[1])/(Double) castIfNeeded((Types) op2[0], resTy , op2[1]);
+			SymbolTable.modifySymbol((String) args[args.length - 1] , dres);
+		}  
+	}
+
 	private static Object castIfNeeded (Types from , Types to , Object toCast) {
 		if (from != to)
 			return SIMPLECAST(new Object[] { from,to,toCast } );

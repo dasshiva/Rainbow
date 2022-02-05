@@ -1,6 +1,7 @@
 package rainbow.lang;
 
 import rainbow.lang.parser.ParserMain;
+import rainbow.lang.exception.BasicException;
 
 /*
  * The main class which launches the Rainbow interpreter
@@ -13,9 +14,15 @@ import rainbow.lang.parser.ParserMain;
 public class Main {
     public static void main(String[] args) {
         Props.initProps();
-        CommandParser cp = new CommandParser(args);
-        cp.parseAll();
-        ParserMain pm = new ParserMain(new IO());
-        pm.parse();
+	try {
+		CommandParser cp = new CommandParser(args);
+		cp.parseAll();
+		ParserMain pm = new ParserMain(new IO());
+		pm.parse();
+	}
+	catch (BasicException e){
+		System.out.println(e.getMessage());
+		System.exit(1);
+	}
     }
 }

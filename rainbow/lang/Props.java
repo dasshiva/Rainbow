@@ -11,7 +11,7 @@ import java.util.Properties;
  */
 
 public class Props {
-    private static Properties props = new Properties();
+    private static final Properties props = new Properties();
     private static final String helpString =  
             "Available options include :\n"+
             "-help                     Print this help menu\n"+
@@ -28,7 +28,7 @@ public class Props {
     * It is called only once by main()
     */
     public static void initProps(){
-        props.setProperty("version","0.0.8a");
+        props.setProperty("version","0.0.10");
         props.setProperty("help","Rainbow " + props.getProperty("version") + "\n" + helpString);
         props.setProperty("no-warn","F");
     }

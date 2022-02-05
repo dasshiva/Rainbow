@@ -69,6 +69,12 @@ class TokenProcessor {
 	    parseSetStatement();
 	    isRset = false;
     }
+    private void parseMulStatement() {
+	    parseAddStatement();
+    }
+    private void parseDivStatement() {
+	    parseSubStatement();
+    }
     private void parseSetStatement() {
         Types type = null;
         String ID = null;
@@ -129,7 +135,8 @@ class TokenProcessor {
         for (int i = 1; i < target.size(); i++) {
             args[i] = target.get(i);
         }
-        Exec.exec(args);
+        if (!Exec.exec(args))
+		error = true;
     }
     private void parseAddStatement() {
         if(target.size()<4)
@@ -139,7 +146,8 @@ class TokenProcessor {
         for (int i = 1; i < args.length ; i++) {
             args[i] = target.get(i);
         }
-        Exec.exec(args);
+        if (!Exec.exec(args))                                 
+		error = true;
     }
     private void parseSubStatement () {
         if(target.size()<4)
@@ -149,7 +157,8 @@ class TokenProcessor {
         for (int i = 1; i<4 ; i++) {
             ar[i] = target.get(i);
         }
-        Exec.exec(ar);
+        if (!Exec.exec(ar))                                     
+		error = true;
     }
     private void parseCastStatement() {
 	    Types toType = null;
@@ -161,32 +170,35 @@ class TokenProcessor {
 			    Types t = SymbolTable.getType(read);
 			    if (t == toType)
 				    return;
-                if (t == Types.TYPE_STRING)
-                    throw new InvalidCastException(toType);
+			    if (t == Types.TYPE_STRING)
+				    throw new InvalidCastException(toType);
 			    newVal = RuntimeMethods.CAST(new Object[]{t,toType,read});
-                needCastID = true;
-                needID = false;
+			    needCastID = true;
+			    needID = false;
 		    }
 		    else if (needCastID) {
-                try {
-                    SymbolTable.isDefined(read);
-                }
-                catch (NoSuchSymbolFoundException e) {
-                    Exec.exec(new Object[]{Ins.transform("Set"), read,toType,newVal});
-                }
-                SymbolTable.modifySymbol(read,newVal);
-            }
+			    try {
+				    SymbolTable.isDefined(read);
+			    }
+			    catch (NoSuchSymbolFoundException e) {
+				    Exec.exec(new Object[]{Ins.transform("Set"), read,toType,newVal});
+			    }
+			    SymbolTable.modifySymbol(read,newVal);
+		    }
 		    else {
 			    toType = Types.transformtoEnum(read);
 			    needID = true;
 		    }
 	    }
+
     }
+
     private boolean validateKeyword (String key) {
         switch(key){
             case "Set": case "Print": case "Add" :
-                case "Cast" : case "RSet" : case "Sub" : return true;
-                default: return false;
+            case "Cast" : case "RSet" : case "Sub" :
+	    case "Mul": case "Div": return true;
+            default: return false;
         }
     }
 }

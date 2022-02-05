@@ -1,5 +1,5 @@
 # This is a program
-Set decimal a 10.9
-Set int b 10
-Sub a b a
+Set int a 10
+Set decimal b 10.9
+Mul a b a
 Print a

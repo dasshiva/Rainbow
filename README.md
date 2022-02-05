@@ -9,10 +9,12 @@ As mentioned above a Rainbow lang program is a collection of statements having a
 ``
 STATEMENT-TYPE ARGS
 ``
+
 Here, "STATEMENT-TYPE" refers to any statement type which describes what that statement actually does and "ARGS" refer to arguements that are given to the keyword. For example :\
 ``
 Set int a 4
 ``
+
 Here the statement type is "Set" (i.e it is a statement that sets the value of a variable) and everything following it are the arguements
-to Set. This statememt basically initializes a variable by the name 'a' to the value 4. One more thing to note about Rainbow's statements are that they must not span to 2 lines i.e each statement must end in a single line because the language assumes that each line is one single statement. \
+to Set. This statememt basically initializes a variable by the name 'a' to the value 4. One more thing to note about Rainbow's statements are that they must not span to 2 lines i.e each statement must end in a single line because the language assumes that each line is one single statement.
 

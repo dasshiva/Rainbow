@@ -19,11 +19,16 @@ public class SymbolTable {
     }
     public static void addSymbol(String name, Types ty, Object value,  Attrs attr){
 	    if (identifiers.contains(name))
-            throw new DuplicateIdentifierException(name);         
+		    throw new DuplicateIdentifierException(name);    
 	    identifiers.add(name);
 	    types.add(ty);
 	    vals.add(value);
 	    attrs.add(attr);
+    }
+    public static String addTempSymbol(Object val, Types ty) {
+	    String symName = "Temp" + (int) (Math.random()*1000);
+	    addSymbol(symName,ty,val,Attrs.ATTR_READONLY);
+	    return symName;
     }
 
     private static Object[] getSymbol(String sym) {
@@ -57,7 +62,7 @@ public class SymbolTable {
             return getType(sym);
 	else if (what.equals("Attr"))
 	    return getAttr(sym);
-    return getValue(sym);
+	return getValue(sym);
     }
     public static Object[] fetchIfDefined (String sym){
 	    isDefined(sym);

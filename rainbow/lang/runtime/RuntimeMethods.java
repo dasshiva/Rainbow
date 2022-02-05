@@ -5,6 +5,7 @@ import rainbow.lang.parser.exception.InvalidCastException;
 import rainbow.lang.Props;
 import rainbow.lang.runtime.exception.InvalidArguementException;
 import rainbow.lang.runtime.exception.ZeroDivisionException;
+import rainbow.lang.runtime.exception.RtException;
 import java.util.Arrays;
 
 public class RuntimeMethods {
@@ -64,6 +65,8 @@ public class RuntimeMethods {
 			intSum = true;
 		else if (ty == Types.TYPE_DECIMAL)
 			doubleSum = true;
+		Object[] details = null;
+		String imName = null;
 		for (int i = 1; i < args.length; i++) {
 			if (i == args.length-1) 
 				lastIter = true;
@@ -77,9 +80,16 @@ public class RuntimeMethods {
 					SymbolTable.modifySymbol((String) arg, finalString);
 				return;
 			}
-			Object[] details = SymbolTable.fetchIfDefined(arg.toString());
+			try {
+				details = SymbolTable.fetchIfDefined(arg.toString());
+				imName = arg.toString();
+			}
+			catch (RtException e) {
+				imName = tryParse(arg);
+				details = SymbolTable.fetchIfDefined(imName);
+			}
 			temp = (Types) details[0];
-			details[1] = CAST(new Object[]{temp,ty,arg});
+			details[1] = CAST(new Object[]{temp,ty,imName});
 			if (intSum)
 				isum += Integer.parseInt(details[1].toString());
 			else if (doubleSum)
@@ -100,6 +110,8 @@ public class RuntimeMethods {
 			doubleSum = true; 
 		else 
 			throw new InvalidArguementException("string","Sub");
+		Object[] details = null ;
+		String imName = null;
 		for (int i = 1; i < args.length; i++) {
 			if (i == args.length-1)
 				lastIter = true;
@@ -111,7 +123,14 @@ public class RuntimeMethods {
 					SymbolTable.modifySymbol((String) arg, dsum);     
 				return;
 			}    
-			Object[] details = SymbolTable.fetchIfDefined(arg.toString()); 
+			try {                                  
+				details = SymbolTable.fetchIfDefined(arg.toString());
+				imName = arg.toString();           
+			}                        
+			catch (RtException e) {          
+				imName = tryParse(arg);           
+				details = SymbolTable.fetchIfDefined(imName);  
+			}
 			temp = (Types) details[0];
 			details[1] = CAST(new Object[]{temp,ty,arg});
 			if (intSum)
@@ -131,8 +150,19 @@ public class RuntimeMethods {
 		else if (resTy == Types.TYPE_DECIMAL) {}
 		else
 			throw new InvalidArguementException("string","Sub");
-		Object[] op1 = SymbolTable.fetchIfDefined((String) args[1]);
-		Object[] op2 = SymbolTable.fetchIfDefined((String) args[2]);
+		Object[] op1 = null , op2 = null;
+		try {
+			op1 = SymbolTable.fetchIfDefined((String) args[1]);
+		}
+		catch (RtException e){
+			op1 = SymbolTable.fetchIfDefined(tryParse(args[1]));
+		}
+		try {
+			op2 = SymbolTable.fetchIfDefined((String) args[2]);
+		}
+		catch (RtException e){                 
+			op2 = SymbolTable.fetchIfDefined(tryParse(args[2]));         
+		}
 		if (intres) {
 			ires = (Integer) castIfNeeded((Types) op1[0], resTy, op1[1]) -
 					(Integer) castIfNeeded((Types) op2[0], resTy, op2[1]);
@@ -151,13 +181,24 @@ public class RuntimeMethods {
 		int ires = 0 ; 
 		double dres = 0.0; 
 		boolean intres = false;
+		Object[] op1 = null, op2 = null;
 		if (resTy == Types.TYPE_INT)          
 			intres = true; 
 		else if (resTy == Types.TYPE_DECIMAL) {}      
 		else    
 			throw new InvalidArguementException("string","Sub");  
-		Object[] op1 = SymbolTable.fetchIfDefined((String) args[1]);
-		Object[] op2 = SymbolTable.fetchIfDefined((String) args[2]); 
+		try {               
+			op1 = SymbolTable.fetchIfDefined((String) args[1]);                   
+		}                           
+		catch (RtException e){                 
+			op1 = SymbolTable.fetchIfDefined(tryParse(args[1])); 
+		}                                                    
+		try {
+			op2 = SymbolTable.fetchIfDefined((String) args[2]);                  
+		}                                   
+		catch (RtException e){                            
+			op2 = SymbolTable.fetchIfDefined(tryParse(args[2])); 
+		}
 		if (op2[1] instanceof Integer && (int)op2[1] == 0 ||
 		op2[1] instanceof Double && (double)op2[1] == 0.0)
 			throw new ZeroDivisionException((String) args[2]);
@@ -175,5 +216,17 @@ public class RuntimeMethods {
 		if (from != to)
 			return SIMPLECAST(new Object[] { from,to,toCast } );
 		return toCast;
+	}
+	private static String tryParse (Object val){
+		try {
+			return SymbolTable.addTempSymbol(Integer.parseInt((String) val), Types.TYPE_INT);
+		}
+		catch (NumberFormatException ex1) {
+			try {
+				return SymbolTable.addTempSymbol(Double.parseDouble((String) val), Types.TYPE_DECIMAL);
+			}
+			catch (NumberFormatException ex2) {}
+			return SymbolTable.addTempSymbol(val,Types.TYPE_STRING);
+		}
 	}
 }

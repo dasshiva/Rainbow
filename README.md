@@ -21,3 +21,17 @@ Set int a 4
 Here the statement type is "Set" (i.e it is a statement that sets the value of a variable) and everything following it are the arguements
 to Set. This statememt basically initializes a variable by the name 'a' to the value 4. One more thing to note about Rainbow's statements are that they must not span to 2 lines i.e each statement must end in a single line because the language assumes that each line is one single statement.
 
+### Statement types 
+The Rainbow language has the following 6 types of statements:
+- `Set`: As mentioned above, a set statement either declares a new 
+variable or changes the value of an already existing variable depending in the arguements passed to it. For example:\
+``
+Set int a 12
+``
+
+This creates a new variable of type `int` called a and initializes to the value 12 
+``
+Set a 32
+``
+
+This changes the value of an already declared variable `a` to 32. Notethat this syntax will throw an error if the variable whose value you are trying to change does not exist . In this example , if a has not been declared then the error message will state `the symbol a is undefined in the current context`

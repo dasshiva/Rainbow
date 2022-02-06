@@ -25,19 +25,13 @@ public class SymbolTable {
 	    vals.add(value);
 	    attrs.add(attr);
     }
-    public static String addTempSymbol(Object val, Types ty) {
-	    String symName = "Temp" + (int) (Math.random()*1000);
-	    addSymbol(symName,ty,val,Attrs.ATTR_READONLY);
-	    return symName;
-    }
-
     private static Object[] getSymbol(String sym) {
         isDefined(sym);
         final int index = identifiers.lastIndexOf(sym);
         return new Object[] { types.get(index),vals.get(index) , attrs.get(index)};
     }
     public static void modifySymbol (String sym,Object newVals) {
-	if ((Attrs)fetchIfDefined(sym,"Attr") == Attrs.ATTR_READONLY)
+	if ((Attrs) fetchIfDefined(sym,"Attr") == Attrs.ATTR_READONLY)
 		throw new ConstantModificationException(sym);
 
 	Types ty = (Types) fetchIfDefined(sym,"Type");
@@ -58,8 +52,8 @@ public class SymbolTable {
         if (what.equals("Type"))
             return dets[0];
 	else if (what.equals("Attr"))
-	    return dets[1];
-	return dets[2];
+	    return dets[2];
+	return dets[1];
     }
     public static Object[] fetchIfDefined (String sym){
 	    isDefined(sym);

@@ -67,7 +67,7 @@ public class IO {
         lineno++;
         Props.addProp("line", currentLine);
         Props.addProp("lineno", Integer.toString(lineno));
-        return currentLine.trim();
+        return currentLine;
     }
 
     /*

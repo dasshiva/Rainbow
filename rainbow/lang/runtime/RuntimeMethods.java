@@ -66,7 +66,6 @@ public class RuntimeMethods {
 		else if (ty == Types.TYPE_DECIMAL)
 			doubleSum = true;
 		Object[] details = null;
-		String imName = null;
 		for (int i = 1; i < args.length; i++) {
 			if (i == args.length-1) 
 				lastIter = true;
@@ -82,18 +81,16 @@ public class RuntimeMethods {
 			}
 			try {
 				details = SymbolTable.fetchIfDefined(arg.toString());
-				imName = arg.toString();
 			}
 			catch (RtException e) {
-				imName = tryParse(arg);
-				details = SymbolTable.fetchIfDefined(imName);
+				details = tryParse(arg);
 			}
 			temp = (Types) details[0];
-			details[1] = CAST(new Object[]{temp,ty,imName});
+			details[1] = castIfNeeded(temp,ty,details[1]);
 			if (intSum)
-				isum += Integer.parseInt(details[1].toString());
+				isum += (int) details[1];//Integer.parseInt(details[1].toString());
 			else if (doubleSum)
-				dsum += Double.parseDouble( details[1].toString());
+				dsum += (double) details[1]; // Double.parseDouble( details[1].toString());
 			else
 				finalString = finalString.concat((String) details[1]);
 		}
@@ -124,15 +121,13 @@ public class RuntimeMethods {
 				return;
 			}    
 			try {                                  
-				details = SymbolTable.fetchIfDefined(arg.toString());
-				imName = arg.toString();           
+				details = SymbolTable.fetchIfDefined(arg.toString());          
 			}                        
-			catch (RtException e) {          
-				imName = tryParse(arg);           
-				details = SymbolTable.fetchIfDefined(imName);  
+			catch (RtException e) {                    
+				details = tryParse(arg);
 			}
 			temp = (Types) details[0];
-			details[1] = CAST(new Object[]{temp,ty,arg});
+			details[1] = castIfNeeded(temp,ty,details[1]);
 			if (intSum)
 				isum *= Integer.parseInt(details[1].toString());
 			else 
@@ -155,13 +150,13 @@ public class RuntimeMethods {
 			op1 = SymbolTable.fetchIfDefined((String) args[1]);
 		}
 		catch (RtException e){
-			op1 = SymbolTable.fetchIfDefined(tryParse(args[1]));
+			op1 = tryParse(args[1]);
 		}
 		try {
 			op2 = SymbolTable.fetchIfDefined((String) args[2]);
 		}
 		catch (RtException e){                 
-			op2 = SymbolTable.fetchIfDefined(tryParse(args[2]));         
+			op2 = tryParse(args[2]);
 		}
 		if (intres) {
 			ires = (Integer) castIfNeeded((Types) op1[0], resTy, op1[1]) -
@@ -191,13 +186,13 @@ public class RuntimeMethods {
 			op1 = SymbolTable.fetchIfDefined((String) args[1]);                   
 		}                           
 		catch (RtException e){                 
-			op1 = SymbolTable.fetchIfDefined(tryParse(args[1])); 
+			op1 = tryParse(args[1]);
 		}                                                    
 		try {
 			op2 = SymbolTable.fetchIfDefined((String) args[2]);                  
 		}                                   
 		catch (RtException e){                            
-			op2 = SymbolTable.fetchIfDefined(tryParse(args[2])); 
+			op2 = tryParse(args[2]); 
 		}
 		if (op2[1] instanceof Integer && (int)op2[1] == 0 ||
 		op2[1] instanceof Double && (double)op2[1] == 0.0)
@@ -217,16 +212,16 @@ public class RuntimeMethods {
 			return SIMPLECAST(new Object[] { from,to,toCast } );
 		return toCast;
 	}
-	private static String tryParse (Object val){
+	private static Object[] tryParse (Object val){
 		try {
-			return SymbolTable.addTempSymbol(Integer.parseInt((String) val), Types.TYPE_INT);
+			return new Object[] { Types.TYPE_INT, Integer.parseInt((String) val) };
 		}
 		catch (NumberFormatException ex1) {
 			try {
-				return SymbolTable.addTempSymbol(Double.parseDouble((String) val), Types.TYPE_DECIMAL);
+				return new Object[] { Types.TYPE_DECIMAL , Double.parseDouble((String) val)};
 			}
 			catch (NumberFormatException ex2) {}
-			return SymbolTable.addTempSymbol(val,Types.TYPE_STRING);
+			return new Object[] { Types.TYPE_STRING , (String) val};
 		}
 	}
 }

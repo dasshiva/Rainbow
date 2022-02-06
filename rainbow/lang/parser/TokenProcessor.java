@@ -75,6 +75,9 @@ class TokenProcessor {
     private void parseDivStatement() {
 	    parseSubStatement();
     }
+    private void parsePrintlnStatement() {
+	    parsePrintStatement();
+    }
     private void parseSetStatement() {
         Types type = null;
         String ID = null;
@@ -197,7 +200,7 @@ class TokenProcessor {
         switch(key){
             case "Set": case "Print": case "Add" :
             case "Cast" : case "RSet" : case "Sub" :
-	    case "Mul": case "Div": return true;
+	    case "Mul": case "Div": case "Println" : return true;
             default: return false;
         }
     }

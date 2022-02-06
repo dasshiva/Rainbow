@@ -1,5 +1,2 @@
 #  This is a program
-Set int a 100
-Set decimal b 10
-Div 10 10 a
-Print a
+Print "Hello World"

@@ -19,8 +19,14 @@ public class RuntimeMethods {
 	}
 	public static void PRINT (Object[] args){
 		for (int i = 1; i < args.length; i++) {
-			Object sym = SymbolTable.fetchIfDefined((String) args[i], "");
-			System.out.println(sym.toString());
+			try {
+				Object sym = SymbolTable.fetchIfDefined((String) args[i], "");
+				System.out.println(sym.toString());
+			}
+			catch (RtException e) {
+				Object[] dets = tryParse(args[i]);
+				System.out.println(dets[1].toString());
+			}
 		}
 	}
 	public static Object CAST (Object[] args){

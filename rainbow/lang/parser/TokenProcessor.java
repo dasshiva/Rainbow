@@ -40,7 +40,7 @@ class TokenProcessor {
 	}
     }
     private void parseList() {
-	if (target.size() == 0) return;
+	if (target.size() == 0 || target.get(0).equals("")) return;
     else {
         try {
             String statType = target.get(0);

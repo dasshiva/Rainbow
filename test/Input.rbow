@@ -1,5 +1,6 @@
 # This is a program
 Set int a 100
+
 Set decimal b 10
-Div a 10 a
+Div 10 0 a
 Print a

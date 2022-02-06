@@ -201,7 +201,7 @@ public class RuntimeMethods {
 		}
 		if (op2[1] instanceof Integer && (int)op2[1] == 0 ||
 		op2[1] instanceof Double && (double)op2[1] == 0.0)
-			throw new ZeroDivisionException((String) args[2]);
+			throw new ZeroDivisionException();
 		if (intres) {    
 			ires = (Integer) castIfNeeded((Types) op1[0], resTy, op1[1]) /(Integer) castIfNeeded((Types) op2[0], resTy, op2[1]);
 			SymbolTable.modifySymbol((String) args[args.length - 1] , ires);

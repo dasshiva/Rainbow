@@ -1,8 +1,7 @@
 package rainbow.lang.runtime.exception;
 
 public class ZeroDivisionException extends RtException {
-	public ZeroDivisionException (String sym){
-		super("Varaible " + sym + " passed to Div action " +
-				" has value 0 or 0.0");
+	public ZeroDivisionException (){
+		super("Variable or immediate value passed to Div statement " +" has value 0 or 0.0");
 	}
 }

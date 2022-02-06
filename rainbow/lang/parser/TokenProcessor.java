@@ -167,7 +167,7 @@ class TokenProcessor {
 	    for (int i = 1; i < target.size(); i++){
 		    String read = target.get(i);
 		    if (needID) {
-			    Types t = SymbolTable.getType(read);
+			    Types t = (Types) SymbolTable.fetchIfDefined(read, "Type");
 			    if (t == toType)
 				    return;
 			    if (t == Types.TYPE_STRING)

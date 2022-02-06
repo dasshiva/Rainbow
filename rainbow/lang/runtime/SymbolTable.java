@@ -36,10 +36,6 @@ public class SymbolTable {
         final int index = identifiers.lastIndexOf(sym);
         return new Object[] { types.get(index),vals.get(index) , attrs.get(index)};
     }
-    public static Types getType (String sym){
-	    Object[] ret = getSymbol(sym);
-	    return (Types) ret[0];
-    }
     public static void modifySymbol (String sym,Object newVals) {
 	if ((Attrs)fetchIfDefined(sym,"Attr") == Attrs.ATTR_READONLY)
 		throw new ConstantModificationException(sym);
@@ -58,24 +54,17 @@ public class SymbolTable {
     }
     public static Object fetchIfDefined (String sym,String what) {
         isDefined(sym);
+	Object[] dets = getSymbol(sym);
         if (what.equals("Type"))
-            return getType(sym);
+            return dets[0];
 	else if (what.equals("Attr"))
-	    return getAttr(sym);
-	return getValue(sym);
+	    return dets[1];
+	return dets[2];
     }
     public static Object[] fetchIfDefined (String sym){
 	    isDefined(sym);
 	    Object[] dets = getSymbol(sym);
 	    return new Object[] { dets[0], dets[1] };
-    }
-    public static Object getValue(String sym) {
-        Object[] details = getSymbol(sym);
-        return details[1];
-    }
-    public static Object getAttr(String sym){
-	    Object[] details = getSymbol(sym);                       
-	    return details[2];
     }
     public static void checkReadonly(Object sym) {
         if (SymbolTable.fetchIfDefined((String)sym,"Attr") == Attrs.ATTR_READONLY)

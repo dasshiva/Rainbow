@@ -19,7 +19,7 @@ public class RuntimeMethods {
 	}
 	public static void PRINT (Object[] args){
 		for (int i = 1; i < args.length; i++) {
-			Object sym = SymbolTable.getValue((String) args[i]);
+			Object sym = SymbolTable.fetchIfDefined((String) args[i], "");
 			System.out.println(sym.toString());
 		}
 	}
@@ -28,16 +28,16 @@ public class RuntimeMethods {
 			throw new InvalidCastException((Types) args[1]);
 		else if (args[0] == Types.TYPE_INT && args[1] == Types.TYPE_DECIMAL)
 		{
-			return ((Integer) SymbolTable.getValue(args[2].toString())).doubleValue();
+			return ((Integer) SymbolTable.fetchIfDefined(args[2].toString(), "")).doubleValue();
 		}
 
 		else if (args[0] == Types.TYPE_DECIMAL && args[1] == Types.TYPE_INT) {
 			if (!(Props.getProp("no-warn").equals("T")))
 				System.out.println("WARNING : Casting from decimal to int will cause loss of precision");
-			return ((Double) SymbolTable.getValue((args[2].toString()))).intValue();
+			return ((Double) SymbolTable.fetchIfDefined((args[2].toString()), "")).intValue();
 		}
 		else if (args[0] == args[1])
-			return SymbolTable.getValue((String) args[2]);
+			return SymbolTable.fetchIfDefined((String) args[2], "");
 		else 
 			return args[2].toString();
 	}
@@ -56,7 +56,7 @@ public class RuntimeMethods {
 	}
 	public static void ADD (Object[] args) {
 		SymbolTable.checkReadonly(args[args.length - 1]);
-		Types ty = SymbolTable.getType((String) args[args.length - 1]) , temp;
+		Types ty = (Types) SymbolTable.fetchIfDefined((String) args[args.length - 1],"Type") , temp;
 		int isum = 0;
 		double dsum = 0.0;
 		String finalString = "";
@@ -100,7 +100,7 @@ public class RuntimeMethods {
 	}
 	public static void MUL (Object[] args) {
 		SymbolTable.checkReadonly(args[args.length - 1]);
-		Types ty = SymbolTable.getType((String) args[args.length - 1]) , temp;         
+		Types ty = (Types) SymbolTable.fetchIfDefined((String) args[args.length - 1], "Type") , temp;         
 		int isum = 1;
 		double dsum = 1.0;   
 		boolean lastIter = false, intSum = false, doubleSum = false;   
@@ -141,7 +141,7 @@ public class RuntimeMethods {
         }
 	public static void SUB (Object[] args) {
 		SymbolTable.checkReadonly(args[args.length - 1]);
-		Types resTy = SymbolTable.getType((String) args[args.length -1]);
+		Types resTy = (Types) SymbolTable.fetchIfDefined((String) args[args.length -1], "Type");
 		int ires = 0 ;
 		double dres = 0.0;
 		boolean intres = false;
@@ -177,7 +177,7 @@ public class RuntimeMethods {
 
 	public static void DIV (Object[] args) { 
 		SymbolTable.checkReadonly(args[args.length - 1]);
-		Types resTy = SymbolTable.getType((String) args[args.length -1]); 
+		Types resTy = (Types) SymbolTable.fetchIfDefined((String) args[args.length -1], "Type"); 
 		int ires = 0 ; 
 		double dres = 0.0; 
 		boolean intres = false;

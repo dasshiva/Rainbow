@@ -24,11 +24,10 @@ to Set. This statememt basically initializes a variable by the name 'a' to the v
 ### Statement types 
 The Rainbow language has the following 6 types of statements:
 - `Set`: As mentioned above, a set statement either declares a new 
-variable or changes the value of an already existing variable depending in the arguements passed to it. For example:\
+variable or changes the value of an already existing variable depending on the arguements passed to it. For example:\
 ``
 Set int a 12
 ``
-
 This creates a new variable of type `int` called a and initializes to the value 12 
 ``
 Set a 32

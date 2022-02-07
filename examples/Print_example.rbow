@@ -1,0 +1,20 @@
+# As the name suggests, the Print statement merely prints
+# its arguememt(s) to the standard output stream. It is
+# capable of printing both immediate values and variables
+# For example, this example prints "Hello World, Sam" to the console
+
+Set string name "Sam"
+Print "Hello World, " name
+
+# This statement adds a newline so that the next part of the example
+# can be distinguished properly
+Println ""
+
+# The Println statement is the same as the Print statement except
+# that it moves the cursor to the next line after printing
+# For example this example, will print:
+# Hello
+# Guys 
+
+Println "Hello" 
+Print "Guys"

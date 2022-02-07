@@ -28,14 +28,14 @@ public class RuntimeMethods {
 		for (int i = 1; i < args.length; i++) {        
 			try {              
 				Object sym = SymbolTable.fetchIfDefined((String) args[i], "");     
-				if (withNewLine) 
+				if (withNewLine && i == args.length - 1) 
 					System.out.println(sym.toString());
 				else 
 					System.out.print(sym.toString());
 			}                                        
 			catch (RtException e) {                  
 				Object[] dets = tryParse(args[i]); 
-				if (withNewLine)
+				if (withNewLine && i == args.length - 1)
 					System.out.println(dets[1].toString());
 				else 
 					System.out.print(dets[1].toString());

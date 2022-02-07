@@ -1,0 +1,16 @@
+# This program demonstrates the use of the Set statement
+# This statement either creates a new variable or changes
+# the value of an already declared variable depending on
+# the arguements passed to it.
+# For example, this creates a variable called 'a' of type 'int'
+# and sets its value to 10
+
+Set int a 10
+Println "Current value of a is : " a
+
+# Once we have declared the variable 'a' we can change its value
+# to 12 by the following syntax
+
+Set a 12
+Print "Value of a now is : " a
+

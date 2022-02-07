@@ -35,9 +35,9 @@ public class SymbolTable {
 		throw new ConstantModificationException(sym);
 
 	Types ty = (Types) fetchIfDefined(sym,"Type");
-	if (ty == Types.TYPE_STRING && newVals instanceof String
-	|| ty == Types.TYPE_DECIMAL && newVals instanceof Double 
-	|| ty == Types.TYPE_INT && newVals instanceof Integer)
+	if ((ty == Types.TYPE_STRING && newVals instanceof String)
+	|| (ty == Types.TYPE_DECIMAL && newVals instanceof Double)
+	|| (ty == Types.TYPE_INT && newVals instanceof Integer) )
 		vals.set(identifiers.lastIndexOf(sym),newVals);
 	else
 		throw new InvalidSetException(sym,ty,newVals.toString());

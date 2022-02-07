@@ -86,6 +86,15 @@ class TokenProcessor {
 	if (target.size() == 3) {
 		ID = target.get(1);
 		val = target.get(2);
+		try {
+			val = Integer.parseInt((String) val);
+		}
+		catch (NumberFormatException e) {
+			try {
+				val = Double.parseDouble((String) val);
+			}
+			catch (NumberFormatException e2) {} 
+		}
 		SymbolTable.modifySymbol(ID,val);
 		return;
 	}

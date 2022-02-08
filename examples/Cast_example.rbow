@@ -1,0 +1,30 @@
+# The cast statement is used to change the type of the value
+# of a variable anst store the result in another variable
+# It takes three arguements - the type to cast to, the name of the
+# variable whose value will be cast to the specified data type
+# and the variable where the resultant value will be stored.
+# If the variable specified by the last arguement is.not defined
+# then it is created automatically. This means you can use it
+# as an alternate for Set when you want to initialize another
+# variable having the same value but a different type
+# For example, here we use cast to create a new variable called
+# "a" which stores the 'int' form of the decimal variable 'b' 
+# It prints '3' to the console. Doing a cast from decimal to 
+# int will cause loss of precision and the runtime emits a
+# warning every time you try to do this unless 'no-warn'
+# had been specified on the command-line
+
+Set decimal b 3.13
+Cast int b a
+Print a
+
+# Note that casting from string to any other data type is not 
+# allowed and doing so causes the runtume to throw an error
+# and exit immediately. This means that the below code will
+# throw an error:
+#
+# Set string msg "9"
+# Cast int msg a
+#.Print a
+#
+# Feel free to uncomment this and try it out!

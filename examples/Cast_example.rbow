@@ -9,7 +9,8 @@
 # variable having the same value but with a different type
 # For example, here we use cast to create a new variable called
 # "a" which stores the 'int' form of the decimal variable 'b' 
-# It prints '3' to the console. 
+# It prints '3' to the console.
+
 # Note: Doing a cast from decimal to 
 # int will cause loss of precision and the runtime emits a
 # warning every time you try to do this unless 'no-warn'
@@ -26,6 +27,6 @@ Print a
 #
 # Set string msg "9"
 # Cast int msg a
-#.Print a
+# Print a
 #
 # Feel free to uncomment this and try it out!

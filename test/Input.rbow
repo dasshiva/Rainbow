@@ -3,6 +3,5 @@ Println "Hello World! Lets find the area of a circle!"
 Println "If the radius of the circle is 7cm"
 RSet decimal pie 3.14
 Set decimal result 0
+Del pie
 Mul pie pie 7 result
-Print "Then the area of the circle is :" result
-

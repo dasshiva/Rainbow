@@ -173,7 +173,7 @@ class TokenProcessor {
 		error = true;
     }
     private void parseCastStatement() {
-	    Types toType = null;
+	Types toType = null;
         Object newVal = null;
 	    boolean needID = false, needCastID = false;
 	    for (int i = 1; i < target.size(); i++){
@@ -204,12 +204,16 @@ class TokenProcessor {
 	    }
 
     }
+    private void parseDelStatement() {
+	    SymbolTable.delSymbol(target.get(1));
+    }
 
     private boolean validateKeyword (String key) {
         switch(key){
             case "Set": case "Print": case "Add" :
             case "Cast" : case "RSet" : case "Sub" :
-	    case "Mul": case "Div": case "Println" : return true;
+	    case "Mul": case "Div": case "Println" : 
+	    case "Del" : return true;
             default: return false;
         }
     }

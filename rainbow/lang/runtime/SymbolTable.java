@@ -64,5 +64,13 @@ public class SymbolTable {
         if (SymbolTable.fetchIfDefined((String)sym,"Attr") == Attrs.ATTR_READONLY)
             throw new ConstantModificationException((String) sym);
     }
+    public static void delSymbol (String sym) {
+	    isDefined(sym);
+	    final int index = identifiers.lastIndexOf(sym);
+	    identifiers.remove(index);
+	    vals.remove(index);
+	    attrs.remove(index);
+	    types.remove(index);
+    }
 
 }

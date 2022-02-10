@@ -57,7 +57,6 @@ class Split implements Iterator<String> {
 			if (inString) {
 				if (ins == '"') {
 					inString = false;
-					continue;
 				}
 				sb.append(ins);
 			}
@@ -72,7 +71,6 @@ class Split implements Iterator<String> {
 			else if (!Character.isWhitespace(ins)) {
 				if (ins == '"') { 
 					inString = true;
-					continue;
 				}
 				sb.append(ins);
 			}

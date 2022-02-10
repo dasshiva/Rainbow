@@ -33,7 +33,10 @@ public class RuntimeMethods {
 				else 
 					System.out.print(sym.toString());
 			}                                        
-			catch (RtException e) {                  
+			catch (RtException e) {
+				if (!isImm(args[i].toString())) {
+					throw e;
+				}
 				Object[] dets = tryParse(args[i]); 
 				if (withNewLine && i == args.length - 1)
 					System.out.println(dets[1].toString());
@@ -102,6 +105,8 @@ public class RuntimeMethods {
 				details = SymbolTable.fetchIfDefined(arg.toString());
 			}
 			catch (RtException e) {
+				if (!isImm(arg.toString()))
+					throw e;
 				details = tryParse(arg);
 			}
 			temp = (Types) details[0];
@@ -125,7 +130,7 @@ public class RuntimeMethods {
 		else if (ty == Types.TYPE_DECIMAL)     
 			doubleSum = true; 
 		else 
-			throw new InvalidArguementException("string","Sub");
+			throw new InvalidArguementException("string","Mul");
 		Object[] details = null ;
 		String imName = null;
 		for (int i = 1; i < args.length; i++) {
@@ -142,7 +147,9 @@ public class RuntimeMethods {
 			try {                                  
 				details = SymbolTable.fetchIfDefined(arg.toString());          
 			}                        
-			catch (RtException e) {                    
+			catch (RtException e) {
+				if(!isImm(arg.toString()))
+					throw e;
 				details = tryParse(arg);
 			}
 			temp = (Types) details[0];
@@ -169,12 +176,16 @@ public class RuntimeMethods {
 			op1 = SymbolTable.fetchIfDefined((String) args[1]);
 		}
 		catch (RtException e){
+			if (!isImm(args[1].toString()))
+					throw e;
 			op1 = tryParse(args[1]);
 		}
 		try {
 			op2 = SymbolTable.fetchIfDefined((String) args[2]);
 		}
-		catch (RtException e){                 
+		catch (RtException e){          
+			if (!isImm(args[2].toString()))            
+					throw e;
 			op2 = tryParse(args[2]);
 		}
 		if (intres) {
@@ -204,13 +215,16 @@ public class RuntimeMethods {
 		try {               
 			op1 = SymbolTable.fetchIfDefined((String) args[1]);                   
 		}                           
-		catch (RtException e){                 
+		catch (RtException e){          
+	
 			op1 = tryParse(args[1]);
 		}                                                    
 		try {
 			op2 = SymbolTable.fetchIfDefined((String) args[2]);                  
 		}                                   
 		catch (RtException e){                            
+			if (!isImm(args[1].toString()))
+					throw e;
 			op2 = tryParse(args[2]); 
 		}
 		if (op2[1] instanceof Integer && (int)op2[1] == 0 ||
@@ -242,5 +256,11 @@ public class RuntimeMethods {
 			catch (NumberFormatException ex2) {}
 			return new Object[] { Types.TYPE_STRING , (String) val};
 		}
+	}
+	private static boolean isImm(String check) {
+		char c = check.charAt(0);
+		if ( Character.isDigit(c)  || c == '"')
+			return true;
+		return false;
 	}
 }

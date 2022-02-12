@@ -254,13 +254,21 @@ public class RuntimeMethods {
 				return new Object[] { Types.TYPE_DECIMAL , Double.parseDouble((String) val)};
 			}
 			catch (NumberFormatException ex2) {}
-			return new Object[] { Types.TYPE_STRING , (String) val};
+			return new Object[] { Types.TYPE_STRING , stripQuotes((String) val)};
 		}
 	}
 	private static boolean isImm(String check) {
 		char c = check.charAt(0);
-		if ( Character.isDigit(c)  || c == '"')
+		if ( Character.isDigit(c)  || c == '"') {
 			return true;
+		}
 		return false;
+	}
+	private static String stripQuotes(String target) {
+		StringBuilder sb = new StringBuilder(target.length() -2);
+		for (int i = 1; i < target.length() - 1; i++) {
+			sb.append(target.charAt(i));
+		}
+		return sb.toString();
 	}
 }

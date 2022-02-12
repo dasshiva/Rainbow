@@ -40,29 +40,29 @@ class TokenProcessor {
 	}
     }
     private void parseList() {
-	if (target.size() == 0 || target.get(0).equals("")) return;
-    else {
-        try {
-            String statType = target.get(0);
-            if (!validateKeyword(statType))
-                throw new IllegalStatementException(statType);
-            Class<?> tp = TokenProcessor.class;
-            String methodName = "parse" + target.get(0) + "Statement";
-            Method toCall = tp.getDeclaredMethod(methodName);
-            toCall.setAccessible(true);
-            toCall.invoke(this);
-        }
-        catch  (NoSuchMethodException | IllegalAccessException ex2) {
-            System.err.println("FATAL RUNTIME ERROR: " + ex2.getClass().toString() + " " + ex2.getMessage() + "\n"
+	    if (target.size() == 0 || target.get(0).equals("")) return;
+	    else {
+		    try {
+			    String statType = target.get(0);
+			    if (!validateKeyword(statType))
+				    throw new IllegalStatementException(statType);
+			    Class<?> tp = TokenProcessor.class;
+			    String methodName = "parse" + target.get(0) + "Statement";
+			    Method toCall = tp.getDeclaredMethod(methodName);
+			    toCall.setAccessible(true);
+			    toCall.invoke(this);
+		    }
+		    catch  (NoSuchMethodException | IllegalAccessException ex2) {
+			    System.err.println("FATAL RUNTIME ERROR: " + ex2.getClass().toString() + " " + ex2.getMessage() + "\n"
                     + "Tip: This is an internal error which means that its a bug(s) in the code. Please report this");
-            StackTracePrinter(ex2);
-            error = true;
-        }
-        catch (InvocationTargetException ex1){
-            System.out.println(ex1.getCause().getMessage());
-            error = true;
-        }
-       }
+			    StackTracePrinter(ex2);
+			    error = true;
+		    }
+		    catch (InvocationTargetException ex1){
+			    System.out.println(ex1.getCause().getMessage());
+			    error = true;
+		    }
+	    }
     }
     private void parseRSetStatement() {
 	    isRset = true;
@@ -82,6 +82,7 @@ class TokenProcessor {
         Types type = null;
         String ID = null;
         Object val = null;
+
         boolean haveType = false, haveID=false, haveVal = false;
 	if (target.size() == 3) {
 		ID = target.get(1);
@@ -98,6 +99,7 @@ class TokenProcessor {
 		SymbolTable.modifySymbol(ID,val);
 		return;
 	}
+
         for (int i=1;i<target.size();i++){ 
 	    String str = target.get(i);
             if (!haveType) {

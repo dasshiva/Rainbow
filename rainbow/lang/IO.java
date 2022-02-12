@@ -51,6 +51,24 @@ public class IO {
 
     }
 
+    /* This constructor will be used by the "Include" statement
+     * (is still being implemented) to open a file given as
+     * the argument as String to Include
+     */
+
+    public IO (String filename) {
+	this.filename = filename;
+	try {
+	    reader = new BufferedReader(new FileReader(this.filename));
+	    Props.addProp("isinclude","T");
+	    Props.addProp("include",this.filename);
+	}
+	catch (FileNotFoundException fe) {
+	    throw new NoSuchFileException(filename);
+	}
+
+    }
+
     /* 
     * This method reads the file line by line and returns the line which
     * was just read. On EOF it returns a special token called END to the parser
@@ -61,7 +79,7 @@ public class IO {
     public String read() throws IOException  {
         currentLine = reader.readLine();
         if (currentLine == null) {
-            //reader.close();
+            reader.close();
             return "END";
         }
         lineno++;

@@ -112,9 +112,9 @@ public class RuntimeMethods {
 			temp = (Types) details[0];
 			details[1] = castIfNeeded(temp,ty,details[1]);
 			if (intSum)
-				isum += (int) details[1];//Integer.parseInt(details[1].toString());
+				isum += (int) details[1];
 			else if (doubleSum)
-				dsum += (double) details[1]; // Double.parseDouble( details[1].toString());
+				dsum += (double) details[1];
 			else
 				finalString = finalString.concat((String) details[1]);
 		}

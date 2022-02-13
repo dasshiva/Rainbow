@@ -11,6 +11,7 @@ import rainbow.lang.parser.exception.*;
 
 import rainbow.lang.runtime.*;
 import rainbow.lang.runtime.exception.NoSuchSymbolFoundException;
+import rainbow.lang.IO;
 
 import static rainbow.lang.Misc.StackTracePrinter;
 
@@ -209,13 +210,18 @@ class TokenProcessor {
     private void parseDelStatement() {
 	    SymbolTable.delSymbol(target.get(1));
     }
-
+    private void parseIncludeStatement () {
+	    if(target.size()!=2)
+		    throw new InsufficientArguementException(target.get(0), 1,target.size()-1);
+	    ParserMain pm = new ParserMain(new IO(target.get(1)));
+	    pm.parse();
+    }
     private boolean validateKeyword (String key) {
         switch(key){
             case "Set": case "Print": case "Add" :
             case "Cast" : case "RSet" : case "Sub" :
 	    case "Mul": case "Div": case "Println" : 
-	    case "Del" : return true;
+	    case "Del" : case "Include" : return true;
             default: return false;
         }
     }

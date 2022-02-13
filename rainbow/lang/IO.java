@@ -2,11 +2,13 @@ package rainbow.lang;
 
 import rainbow.lang.exception.NoInputFileException;
 import rainbow.lang.exception.NoSuchFileException;
+import rainbow.lang.Props;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import static java.io.File.separatorChar;
 
 /*
 * This class contains the I/0 routines used by the Split class to read from the file
@@ -57,14 +59,17 @@ public class IO {
      */
 
     public IO (String filename) {
-	this.filename = filename;
+	if (filename.charAt(0) != separatorChar) 
+		this.filename = Props.getProp("prefix") + separatorChar + filename;
+	else 
+		this.filename = filename;
 	try {
 	    reader = new BufferedReader(new FileReader(this.filename));
 	    Props.addProp("isinclude","T");
 	    Props.addProp("include",this.filename);
 	}
 	catch (FileNotFoundException fe) {
-	    throw new NoSuchFileException(filename);
+	    throw new NoSuchFileException(this.filename);
 	}
 
     }

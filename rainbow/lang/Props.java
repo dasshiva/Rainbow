@@ -5,8 +5,7 @@ import java.util.Properties;
  * This class maintains the application-wide properties 
  * which are queried and modified by using the getProp() 
  * and addProp() methods. Some of the predefined properties and what they contain are :
- * help - the help message which describes the purpose of the program and 
- *        important command line options
+ * help - the help message which describes the purpose of the program and important command line options
  * version - the version of the program 
  */
 
@@ -17,6 +16,7 @@ public class Props {
             "-help                     Print this help menu\n"+
             "-version                  Print version information\n" +
             "-input                    Specify the file to be read\n" +
+	    "-prefix                   Specify the directory under which all files used by 'Include' statement. The default value is the directory from where the program is launched or '.'\n" +
 	    "-no-warn                  Disable all runtime warnings\n" +
 	    "If -input is not provided, then the first argument is assumed to be the file to be read";
 
@@ -25,12 +25,14 @@ public class Props {
 
     /* 
     * Initialize the system-wide properties and set them to their values
-    * It is called only once by main()
+    * This is called only once by main()
     */
     public static void initProps(){
-        props.setProperty("version","0.1.3");
+        props.setProperty("version","0.1.4");
         props.setProperty("help","Rainbow " + props.getProperty("version") + "\n" + helpString);
         props.setProperty("no-warn","F");
+	props.setProperty("isinclude", "F");
+	props.setProperty("prefix", System.getProperty("user.dir"));
     }
 
     /* 

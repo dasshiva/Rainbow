@@ -32,7 +32,7 @@ public class CommandParser {
     private final String[] stopOpts = {"-version","-help"};
 
     /* The options which are described by NEED_ARGS */
-    private final String[] argOpts = {"-input"};
+    private final String[] argOpts = {"-input","-prefix"};
 
     /* The options which are described by NO_NEED_ARGS */
     private final String[] noArgOpts = {"-no-warn"};
@@ -50,7 +50,7 @@ public class CommandParser {
     }
     /* Parse all the commad-line arguements and set the global properties */
     public void parseAll(){
-        /* stores the current option without the '-' */
+        /* stores the current option without the '-' in the beginning */
         String currentOption=null;
 
         /* true if currentOption is an option that needs arguements */
@@ -61,7 +61,7 @@ public class CommandParser {
         * If any of them beigns with a '-', then its an option.
         * If it is an option determine if it needs arguements and loop again to collect its 
         * arguement if it does need arguements,
-        * Throw an exception if the option is recognized
+        * Throw an exception if the option is unrecognized
         */
 
         for (String each:args){

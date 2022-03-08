@@ -42,6 +42,8 @@ class Split implements Iterator<String> {
 	private void split(){
 		/* a flag which is set if we are inside string */
 		boolean inString = false;
+		/* a flag which indicates that we need to terminate the loop immediately) */
+		boolean returnimm = false;
 
 		/* a StringBuilder to store the split string */
 		StringBuilder sb = new StringBuilder();
@@ -50,7 +52,7 @@ class Split implements Iterator<String> {
 
 			/*
 			* if inString is set then we are inside a string, and we should
-			* add all characters to the string irrespective of whether their
+			* add all characters to the string irrespective of whether they are
 			* whitespace or not
 			*/
 
@@ -65,13 +67,20 @@ class Split implements Iterator<String> {
 			* If we are not inside a string then check if the current character is whitespace
 			* If it is whitespace then go to the else clause otherwise check if it is double quotes. (")
 			* If they are double quotes then set the inString flag and continue to the next iteration.
+			* If they are special characters like ';' or '=' then set returnimm because they are considered as separate tokens
 			* Otherwise, add the character to the split string
 			*/
 
-			else if (!Character.isWhitespace(ins)) {
+			else if (!Character.isWhitespace(ins) && !returnimm) {
 				if (ins == '"') { 
 					inString = true;
 				}
+
+				switch (ins) {
+					case '=':
+					case ';': returnimm = true;
+				}
+
 				sb.append(ins);
 			}
 
@@ -83,11 +92,11 @@ class Split implements Iterator<String> {
 				*/
 
 				currentIndex += 1;
+				/* The string's end has been reached and the caller should get us more input by calling getNext() */
 				if (currentIndex >= toParse.length())
-					/* The string's end has been reached and the caller should get us more input by calling getNext() */
 					isLeft = false;
-
-				else if (sb.length()==0) /* don't return if the parsed string is empty */
+				/* don't return if the parsed string is empty */
+				else if (sb.length()==0)
 					continue;
 				currentString = sb.toString();
 				return;
@@ -117,7 +126,7 @@ class Split implements Iterator<String> {
 				index = Comment.commentIndex(toParse);
 			}
 		}
-		/* if toParse is the special END token then we have reached EOF */
+		/* if toParse is the special END token then we have reached EOF so set the appropriate flags */
 		if (checkEOFString(toParse)) {
 			isFinished = true;
 			isLeft = false;
